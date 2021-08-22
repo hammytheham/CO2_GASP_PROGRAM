@@ -6,11 +6,12 @@ import sys
 
 #import modules used in code
 import data_import
+from co2_gasp_run_options import *     #import the option file from within the same folder
 
 
 
 def main():
-    data_import.main()
+    data_import.main(geo_interp_T_F)
 
 
 

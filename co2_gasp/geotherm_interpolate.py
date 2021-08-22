@@ -10,18 +10,13 @@ from shapely.geometry import Polygon
 import geopandas as gpd
 from geopandas.tools import sjoin
 
-data='/Users/hamish/Documents/AWSprojects/data'
+data='/Users/hamish/github/co2_gasp/INPUT_DATA/geothermal_result_files'
 
 ##Need to upgrade geopandas to 8.1 for this part of the script to work.
 """Script run at 0.1 dp resolution """
 
-
-
-
-def read_geotherm():
+def read_geotherm(geo):
     #read heatflow csv. IntervalCorrectedGradient is the geothermal gradient
-    geo=pd.read_csv(data_import.data+'/core.template_heatflow_materialized.csv',sep=',')
-    print(len())
     geo=geo[(geo.IntervalCorrectedGradient >= 0) & (geo.IntervalCorrectedGradient <= 200)]  #old
     geo=geo.round({'LatDegreeWGS84': 1, 'LongDegreeWGS84': 1}) # round columns to 1 dp
     geo=geo.groupby([geo.LatDegreeWGS84,geo.LongDegreeWGS84]).mean()
@@ -106,9 +101,9 @@ def read_grouped():
     grouped=grouped.round({'Grad':1})
     return grouped
 
-def main():
+def main(geo):
     """only running the finished database """
-    interp=read_geotherm()
+    interp=read_geotherm(geo)
     interp=interp_gradient(interp)
     sub_explo=read_shape()
     grouped=intersecting_points(interp,sub_explo)

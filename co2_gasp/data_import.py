@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
-
+import geotherm_interpolate
 data='/Users/hamish/github/co2_gasp/INPUT_DATA'
 
 def read_in_data():
@@ -12,15 +12,16 @@ def read_in_data():
      """
     rawusgs = pd.read_csv(data+'/USGS_Produced_Waters_v2',sep='\t')
     geo=pd.read_csv(data+'/core.template_heatflow_materialized.csv',sep=',')
-    print(rawusgs.head())
+    print(geo.head())
     return rawusgs, geo
 
-def run_geeothermal_interpolate(geo,choice):
+def run_geeothermal_interpolate(geo,geo_interp_T_F):
     """ Program interpolates the SMUH geothermal gradient
     By default choice == False """
-    if choice == True:
+    if geo_interp_T_F == True:
         grad=geotherm_interpolate.main(geo)
-    if choice == False:
+    if geo_interp_T_F == False:
+        print('here')
         grad=pd.read_csv(data+'filename')
     return grad
 
@@ -40,8 +41,9 @@ def data_processing1(rawusgs):
 	print('usgs=',len(usgs))
 	return usgs
 
-def main():
+def main(geo_interp_T_F):
     rawusgs,geo =read_in_data()
+    run_geeothermal_interpolate(geo,geo_interp_T_F)
 
 if __name__ == "__main__":
 	main()
