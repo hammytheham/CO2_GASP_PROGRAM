@@ -9,15 +9,15 @@ from shapely.geometry import Point
 from shapely.geometry import Polygon
 import geopandas as gpd
 from geopandas.tools import sjoin
-
-data='/Users/hamish/github/co2_gasp/INPUT_DATA/geothermal_result_files'
+import data_import
+import subprocess
 
 ##Need to upgrade geopandas to 8.1 for this part of the script to work.
 """Script run at 0.1 dp resolution """
 
 def read_geotherm(geo):
     #read heatflow csv. IntervalCorrectedGradient is the geothermal gradient
-    geo=geo[(geo.IntervalCorrectedGradient >= 0) & (geo.IntervalCorrectedGradient <= 200)]  #old
+    geo=geo[(geo.IntervalCorrectedGradient >= 0) & (geo.IntervalCorrectedGradient <= 200)]
     geo=geo.round({'LatDegreeWGS84': 1, 'LongDegreeWGS84': 1}) # round columns to 1 dp
     geo=geo.groupby([geo.LatDegreeWGS84,geo.LongDegreeWGS84]).mean()
     geo=geo.unstack()
@@ -31,11 +31,6 @@ def read_geotherm(geo):
     return interp
 
 def interp_gradient(interp):
-    #north=49°23′04.1″N 95°9′12.2″W
-    #south=24°26.8′N 81°55.6′W
-    #east=44°48′45.2″N 66°56′49.3″W
-    #west= 48°10′42.7″N 124°46′18.1″W
-    #####interp=pd.read_csv('/Volumes/hamish/HamishHD/Desktop/USGSwork/data/gradient.csv',usecols=[1,2,3])
     geometry_interp = [Point(xy) for xy in zip(interp.Lon, interp.Lat)]
     crs = {'init': 'epsg:4269'} #http://www.spatialreference.org/ref/epsg/2263/
     interp_df = gpd.GeoDataFrame(interp, crs=crs, geometry=geometry_interp)
@@ -52,7 +47,6 @@ def interp_gradient(interp):
     lon_grid = np.arange(-68.5,-124.3,-0.1) #interp area just outside of bounds of data 0.1 decimal resolution
     lon_grid, lat_grid =np.meshgrid(lon_grid ,lat_grid )
     zi=griddata((sub_interp.Lon,sub_interp.Lat),sub_interp.Grad,(lon_grid,lat_grid),method='linear')
-
     lat_flat=lat_grid.flatten()
     lon_flat=lon_grid.flatten()
     grad_flat=zi.flatten()
@@ -67,7 +61,7 @@ def interp_gradient(interp):
     return interp
 
 def read_shape():
-    country_boundary_us = gpd.read_file(data_import.data+'/cb_2018_us_nation_5m/cb_2018_us_nation_5m.shp')
+    country_boundary_us = gpd.read_file(data_import.geotherm_result+'/cb_2018_us_nation_5m/cb_2018_us_nation_5m.shp')
     print('read in')
     exploded=country_boundary_us.explode()
     box=[(-128.600464,24.374619),(-128.600464,50.406767),(-60.748901,50.406767),(-60.748901,24.374619)]
@@ -87,15 +81,16 @@ def intersecting_points(interp,sub_explo):
     grouped=grouped.apply(lambda x: x.reset_index(drop = True))
     grouped=grouped.dropna(axis=0)
     grouped=grouped.set_index(grouped.columns[0]).reset_index()
-    grouped.to_file(driver='ESRI Shapefile', filename=data_import.temp+'/interp_masked_out_1dp_no_filter.shp')
-    print('grouped run')
+    grouped.to_file(driver='ESRI Shapefile', filename=data_import.geotherm_result+'/interp_masked_out_1dp_no_filter.shp')
+    pipe = subprocess.run(data_import.directory+'/gdal_command.sh')
+    print('gdal command run')
     print(grouped.head())
-    grouped.to_csv(data_import.temp+'/geotherm_grad_grouped_1dp_no_filter.csv')
+    grouped.to_csv(data_import.geotherm_result+'/geotherm_grad_grouped_1dp_no_filter.csv')
     return grouped
 
 def read_grouped():
     print('Importing geothermal gradients')
-    grouped=pd.read_csv(data_import.temp+'/geotherm_grad_grouped_1dp_no_filter.csv')
+    grouped=pd.read_csv(data_import.geotherm_result+'/geotherm_grad_grouped_1dp_no_filter.csv')
     grouped=grouped.drop([grouped.columns[0],'index_right','geometry'],axis=1)
     grouped=grouped.round({'Lat':1,'Lon':1})  #This is just formatting the csv correctly, for some reason wasn't happy
     grouped=grouped.round({'Grad':1})
@@ -107,7 +102,7 @@ def main(geo):
     interp=interp_gradient(interp)
     sub_explo=read_shape()
     grouped=intersecting_points(interp,sub_explo)
-    #grouped=read_grouped()
+    grouped=read_grouped()
     return grouped
 
 

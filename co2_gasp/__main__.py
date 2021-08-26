@@ -6,15 +6,20 @@ import sys
 
 #import modules used in code
 import data_import
+import CO2_density_state
 from co2_gasp_run_options import *     #import the option file from within the same folder
 
+def CO2_only_sim(grad, sur):
+	print('hi')
+	CO2_density_state.main(grad, sur)
 
 
 def main():
-    data_import.main(geo_interp_T_F)
-
+	rawusgs, grad, sur =data_import.main()
+	if CO2_only == True:
+		CO2_only_sim(grad, sur)
 
 
 
 if __name__ == "__main__":
-    main()
+	main()
