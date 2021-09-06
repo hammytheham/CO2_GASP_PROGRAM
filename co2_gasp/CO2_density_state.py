@@ -306,7 +306,6 @@ def main(grad, sur):
 			spoly=bounding_box()
 			D_T=intersecting_points_bounding_vertical(grad_sur,spoly)
 
-print('testing')
 
 	#vertical_profile(grad_sur)
 
