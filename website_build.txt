@@ -1,0 +1,469 @@
+co-2-gasp-bucket
+
+"StackId": "arn:aws:cloudformation:us-east-2:769126297153:stack/co2gaspCoreStack/46226bd0-1003-11ec-800f-06009891ef2c"
+
+Successfully built d1809d35d4c8
+Successfully tagged 769126297153.dkr.ecr.us-east-2.amazonaws.com/co2gasp/service:latest
+
+{
+    "repository": {
+        "repositoryUri": "769126297153.dkr.ecr.us-east-2.amazonaws.com/co2gasp/service",
+        "imageScanningConfiguration": {
+            "scanOnPush": false
+        },
+        "encryptionConfiguration": {
+            "encryptionType": "AES256"
+        },
+        "registryId": "769126297153",
+        "imageTagMutability": "MUTABLE",
+        "repositoryArn": "arn:aws:ecr:us-east-2:769126297153:repository/co2gasp/service",
+        "repositoryName": "co2gasp/service",
+        "createdAt": 1631191913.0
+    }
+}
+
+ec2-user:~/environment/CO2_GASP_PROGRAM (master) $ aws ecr describe-images --repository-name co2gasp/service
+{
+    "imageDetails": [
+        {
+            "artifactMediaType": "application/vnd.docker.container.image.v1+json",
+            "imageSizeInBytes": 1290449542,
+            "imageDigest": "sha256:3afa8e33e1eb55ea8b777e8b2892227dd038337577e741f9e86feac27b970f16",
+            "imageManifestMediaType": "application/vnd.docker.distribution.manifest.v2+json",
+            "imageTags": [
+                "latest"
+            ],
+            "registryId": "769126297153",
+            "repositoryName": "co2gasp/service",
+            "imagePushedAt": 1631192206.0
+        }
+    ]
+}
+
+{
+    "cluster": {
+        "status": "ACTIVE",
+        "defaultCapacityProviderStrategy": [],
+        "statistics": [],
+        "capacityProviders": [],
+        "tags": [],
+        "clusterName": "co2gasp-Cluster",
+        "settings": [
+            {
+                "name": "containerInsights",
+                "value": "disabled"
+            }
+        ],
+        "registeredContainerInstancesCount": 0,
+        "pendingTasksCount": 0,
+        "runningTasksCount": 0,
+        "activeServicesCount": 0,
+        "clusterArn": "arn:aws:ecs:us-east-2:769126297153:cluster/co2gasp-Cluster"
+    }
+}
+{
+    "taskDefinition": {
+        "status": "ACTIVE",
+        "memory": "512",
+        "registeredAt": 1631192912.69,
+        "networkMode": "awsvpc",
+        "family": "co2gaspservice",
+        "registeredBy": "arn:aws:iam::769126297153:root",
+        "placementConstraints": [],
+        "requiresAttributes": [
+            {
+                "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+            },
+            {
+                "name": "ecs.capability.execution-role-awslogs"
+            },
+            {
+                "name": "com.amazonaws.ecs.capability.ecr-auth"
+            },
+            {
+                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+            },
+            {
+                "name": "com.amazonaws.ecs.capability.task-iam-role"
+            },
+            {
+                "name": "ecs.capability.execution-role-ecr-pull"
+            },
+            {
+                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+            },
+            {
+                "name": "ecs.capability.task-eni"
+            }
+        ],
+        "cpu": "256",
+        "executionRoleArn": "arn:aws:iam::769126297153:role/co2gaspCoreStack-EcsServiceRole-1B77YI18VA74J",
+        "compatibilities": [
+            "EC2",
+            "FARGATE"
+        ],
+        "volumes": [],
+        "requiresCompatibilities": [
+            "FARGATE"
+        ],
+        "taskRoleArn": "arn:aws:iam::769126297153:role/co2gaspCoreStack-ECSTaskRole-1QY3PYHUJ2T4G",
+        "taskDefinitionArn": "arn:aws:ecs:us-east-2:769126297153:task-definition/co2gaspservice:3",
+        "containerDefinitions": [
+            {
+                "environment": [],
+                "name": "CO2GASP-Service",
+                "mountPoints": [],
+                "image": "769126297153.dkr.ecr.us-east-2.amazonaws.com/co2gasp/service",
+                "cpu": 0,
+                "portMappings": [
+                    {
+                        "protocol": "tcp",
+                        "containerPort": 8080,
+                        "hostPort": 8080
+                    }
+                ],
+                "logConfiguration": {
+                    "logDriver": "awslogs",
+                    "options": {
+                        "awslogs-region": "us-east-2",
+                        "awslogs-stream-prefix": "awslogs-co2gasp-service",
+                        "awslogs-group": "co2gasp-logs"
+                    }
+                },
+                "essential": true,
+                "volumesFrom": []
+            }
+        ],
+        "revision": 3
+    }
+}
+
+aws elbv2 create-listener --default-actions TargetGroupArn=arn:aws:elasticloadbalancing:us-east-2:769126297153:targetgroup/co2gasp-new-TargetGroup/97be4bd8d960db94,Type=forward --load-balancer-arn arn:aws:elasticloadbalancing:us-east-2:769126297153:loadbalancer/net/co2gaspnew-nlb/62ee064142691101 --port 80 --protocol TCP
+{
+    "Listeners": [
+        {
+            "Protocol": "TCP",
+            "DefaultActions": [
+                {
+                    "ForwardConfig": {
+                        "TargetGroups": [
+                            {
+                                "TargetGroupArn": "arn:aws:elasticloadbalancing:us-east-2:769126297153:targetgroup/co2gasp-new-TargetGroup/97be4bd8d960db94"
+                            }
+                        ]
+                    },
+                    "TargetGroupArn": "arn:aws:elasticloadbalancing:us-east-2:769126297153:targetgroup/co2gasp-new-TargetGroup/97be4bd8d960db94",
+                    "Type": "forward"
+                }
+            ],
+            "LoadBalancerArn": "arn:aws:elasticloadbalancing:us-east-2:769126297153:loadbalancer/net/co2gaspnew-nlb/62ee064142691101",
+            "Port": 80,
+            "ListenerArn": "arn:aws:elasticloadbalancing:us-east-2:769126297153:listener/net/co2gaspnew-nlb/62ee064142691101/224a22f8ebb8022b"
+        }
+    ]
+}
+
+
+ec2-user:~/environment/CO2_GASP_PROGRAM (master) $ aws ecs create-service --cli-input-json file://~/environment/aws-cli/service-definition.json
+{
+    "service": {
+        "networkConfiguration": {
+            "awsvpcConfiguration": {
+                "subnets": [
+                    "subnet-0803b601a20153a45",
+                    "subnet-072a04035ec2dc8c3"
+                ],
+                "securityGroups": [
+                    "sg-060925b284ba780c8"
+                ],
+                "assignPublicIp": "DISABLED"
+            }
+        },
+        "launchType": "FARGATE",
+        "enableECSManagedTags": false,
+        "loadBalancers": [
+            {
+                "containerName": "CO2GASP-Service",
+                "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-2:769126297153:targetgroup/co2gasp-new-TargetGroup/97be4bd8d960db94",
+                "containerPort": 8080
+            }
+        ],
+        "desiredCount": 1,
+        "clusterArn": "arn:aws:ecs:us-east-2:769126297153:cluster/co2gasp-Cluster",
+        "serviceArn": "arn:aws:ecs:us-east-2:769126297153:service/co2gasp-Cluster/CO2GASP-Service",
+        "deploymentConfiguration": {
+            "deploymentCircuitBreaker": {
+                "enable": false,
+                "rollback": false
+            },
+            "maximumPercent": 200,
+            "minimumHealthyPercent": 0
+        },
+        "createdAt": 1631194737.782,
+        "healthCheckGracePeriodSeconds": 0,
+        "schedulingStrategy": "REPLICA",
+        "placementConstraints": [],
+        "deployments": [
+            {
+                "status": "PRIMARY",
+                "networkConfiguration": {
+                    "awsvpcConfiguration": {
+                        "subnets": [
+                            "subnet-0803b601a20153a45",
+                            "subnet-072a04035ec2dc8c3"
+                        ],
+                        "securityGroups": [
+                            "sg-060925b284ba780c8"
+                        ],
+                        "assignPublicIp": "DISABLED"
+                    }
+                },
+                "pendingCount": 0,
+                "launchType": "FARGATE",
+                "rolloutState": "IN_PROGRESS",
+                "rolloutStateReason": "ECS deployment ecs-svc/4125932018478163548 in progress.",
+                "createdAt": 1631194737.782,
+                "desiredCount": 1,
+                "failedTasks": 0,
+                "taskDefinition": "arn:aws:ecs:us-east-2:769126297153:task-definition/co2gaspservice:3",
+                "updatedAt": 1631194737.782,
+                "platformVersion": "1.4.0",
+                "id": "ecs-svc/4125932018478163548",
+                "runningCount": 0
+            }
+        ],
+        "serviceName": "CO2GASP-Service",
+        "events": [],
+        "runningCount": 0,
+        "status": "ACTIVE",
+        "serviceRegistries": [],
+        "pendingCount": 0,
+        "createdBy": "arn:aws:iam::769126297153:root",
+        "platformVersion": "LATEST",
+        "placementStrategy": [],
+        "propagateTags": "NONE",
+        "roleArn": "arn:aws:iam::769126297153:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
+        "taskDefinition": "arn:aws:ecs:us-east-2:769126297153:task-definition/co2gaspservice:3",
+        "enableExecuteCommand": false
+    }
+}
+
+ec2-user:~/environment/CO2_GASP_PROGRAM (master) $ aws codecommit create-repository --repository-name co2gaspservice-repository
+{
+    "repositoryMetadata": {
+        "repositoryName": "co2gaspservice-repository",
+        "cloneUrlSsh": "ssh://git-codecommit.us-east-2.amazonaws.com/v1/repos/co2gaspservice-repository",
+        "lastModifiedDate": 1631195555.044,
+        "repositoryId": "bad6f8a3-e5c4-42ae-a734-fa5c1e8c88d3",
+        "cloneUrlHttp": "https://git-codecommit.us-east-2.amazonaws.com/v1/repos/co2gaspservice-repository",
+        "creationDate": 1631195555.044,
+        "Arn": "arn:aws:codecommit:us-east-2:769126297153:co2gaspservice-repository",
+        "accountId": "769126297153"
+    }
+}
+
+aws codebuild create-project --cli-input-json file://~/environment/aws-cli/code-build-project.json
+{
+   "project": {
+       "timeoutInMinutes": 60,
+       "name": "co2gaspServiceCodeBuildProject",
+       "serviceRole": "arn:aws:iam::769126297153:role/co2gaspServiceCodeBuildServiceRole",
+       "created": 1631197368.205,
+       "artifacts": {
+           "packaging": "NONE",
+           "encryptionDisabled": false,
+           "type": "NO_ARTIFACTS",
+           "name": "co2gaspServiceCodeBuildProject"
+       },
+       "lastModified": 1631197368.205,
+       "cache": {
+           "type": "NO_CACHE"
+       },
+       "environment": {
+           "computeType": "BUILD_GENERAL1_2XLARGE",
+           "imagePullCredentialsType": "CODEBUILD",
+           "privilegedMode": true,
+           "image": "aws/codebuild/standard:5.0",
+           "environmentVariables": [
+               {
+                   "type": "PLAINTEXT",
+                   "name": "AWS_ACCOUNT_ID",
+                   "value": "769126297153"
+               },
+               {
+                   "type": "PLAINTEXT",
+                   "name": "AWS_DEFAULT_REGION",
+                   "value": "us-east-2"
+               }
+           ],
+           "type": "LINUX_CONTAINER"
+       },
+       "source": {
+           "insecureSsl": false,
+           "type": "CODECOMMIT",
+           "location": "https://git-codecommit.us-east-2.amazonaws.com/v1/repos/co2gaspservice-repository"
+       },
+       "queuedTimeoutInMinutes": 480,
+       "badge": {
+           "badgeEnabled": false
+       },
+       "encryptionKey": "arn:aws:kms:us-east-2:769126297153:alias/aws/s3",
+       "arn": "arn:aws:codebuild:us-east-2:769126297153:project/co2gaspServiceCodeBuildProject"
+   }
+}
+
+aws s3 mb s3://co2gaspartifacts
+make_bucket:
+
+
+ec2-user:~/environment/CO2_GASP_PROGRAM (master) $ aws codepipeline create-pipeline --cli-input-json file://~/environment/aws-cli/code-pipeline.json
+{
+    "pipeline": {
+        "roleArn": "arn:aws:iam::769126297153:role/co2gaspServiceCodePipelineServiceRole",
+        "stages": [
+            {
+                "name": "Source",
+                "actions": [
+                    {
+                        "inputArtifacts": [],
+                        "name": "Source",
+                        "actionTypeId": {
+                            "category": "Source",
+                            "owner": "AWS",
+                            "version": "1",
+                            "provider": "CodeCommit"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "co2gaspService-SourceArtifact"
+                            }
+                        ],
+                        "configuration": {
+                            "BranchName": "master",
+                            "RepositoryName": "co2gaspservice-repository"
+                        },
+                        "runOrder": 1
+                    }
+                ]
+            },
+            {
+                "name": "Build",
+                "actions": [
+                    {
+                        "inputArtifacts": [
+                            {
+                                "name": "co2gaspService-SourceArtifact"
+                            }
+                        ],
+                        "name": "Build",
+                        "actionTypeId": {
+                            "category": "Build",
+                            "owner": "AWS",
+                            "version": "1",
+                            "provider": "CodeBuild"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "co2gaspService-BuildArtifact"
+                            }
+                        ],
+                        "configuration": {
+                            "ProjectName": "co2gaspServiceCodeBuildProject"
+                        },
+                        "runOrder": 1
+                    }
+                ]
+            },
+            {
+                "name": "Deploy",
+                "actions": [
+                    {
+                        "inputArtifacts": [
+                            {
+                                "name": "co2gaspService-BuildArtifact"
+                            }
+                        ],
+                        "name": "Deploy",
+                        "actionTypeId": {
+                            "category": "Deploy",
+                            "owner": "AWS",
+                            "version": "1",
+                            "provider": "ECS"
+                        },
+                        "outputArtifacts": [],
+                        "configuration": {
+                            "ClusterName": "co2gasp-Cluster",
+                            "ServiceName": "CO2GASP-Service",
+                            "FileName": "imagedefinitions.json"
+                        },
+                        "runOrder": 1
+                    }
+                ]
+            }
+        ],
+        "artifactStore": {
+            "type": "S3",
+            "location": "co2gaspartifacts"
+        },
+        "name": "co2gaspServiceCICDPipeline",
+        "version": 1
+    }
+}
+
+
+aws ecr set-repository-policy --repository-name mythicalmysfits/service --policy-text file://~/environment/aws-cli/ecr-policy.json
+{
+   "policyText": "{\n  \"Version\" : \"2008-10-17\",\n  \"Statement\" : [ {\n    \"Sid\" : \"AllowPushPull\",\n    \"Effect\" : \"Allow\",\n    \"Principal\" : {\n      \"AWS\" : \"arn:aws:iam::769126297153:role/co2gaspServiceCodeBuildServiceRole\"\n    },\n    \"Action\" : [ \"ecr:GetDownloadUrlForLayer\", \"ecr:BatchGetImage\", \"ecr:BatchCheckLayerAvailability\", \"ecr:PutImage\", \"ecr:InitiateLayerUpload\", \"ecr:UploadLayerPart\", \"ecr:CompleteLayerUpload\" ]\n  } ]\n}",
+   "repositoryName": "mythicalmysfits/service",
+   "registryId": "769126297153"
+}
+
+{
+    "project": {
+        "timeoutInMinutes": 60,
+        "name": "co2gaspServiceCodeBuildProject",
+        "serviceRole": "arn:aws:iam::769126297153:role/co2gaspServiceCodeBuildServiceRole",
+        "tags": [],
+        "artifacts": {
+            "packaging": "NONE",
+            "encryptionDisabled": false,
+            "type": "NO_ARTIFACTS",
+            "name": "co2gaspServiceCodeBuildProject"
+        },
+        "lastModified": 1631293888.7,
+        "cache": {
+            "type": "NO_CACHE"
+        },
+        "created": 1631197368.205,
+        "environment": {
+            "computeType": "BUILD_GENERAL1_MEDIUM",
+            "imagePullCredentialsType": "CODEBUILD",
+            "privilegedMode": true,
+            "image": "aws/codebuild/standard:5.0",
+            "environmentVariables": [
+                {
+                    "type": "PLAINTEXT",
+                    "name": "AWS_ACCOUNT_ID",
+                    "value": "769126297153"
+                },
+                {
+                    "type": "PLAINTEXT",
+                    "name": "AWS_DEFAULT_REGION",
+                    "value": "us-east-2"
+                }
+            ],
+            "type": "LINUX_CONTAINER"
+        },
+        "source": {
+            "insecureSsl": false,
+            "type": "CODECOMMIT",
+            "location": "https://git-codecommit.us-east-2.amazonaws.com/v1/repos/co2gaspservice-repository"
+        },
+        "queuedTimeoutInMinutes": 480,
+        "badge": {
+            "badgeEnabled": false
+        },
+        "encryptionKey": "arn:aws:kms:us-east-2:769126297153:alias/aws/s3",
+        "arn": "arn:aws:codebuild:us-east-2:769126297153:project/co2gaspServiceCodeBuildProject"
+    }
+}
