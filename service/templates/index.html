@@ -2,4 +2,18 @@
 
 {% block content %}
 <h2> Welcome to CO2-GASP </h2>
+<p> You have the option of either modelling; <br>
+    Option 1) Geothermal gradients and CO2 free state/denisty <br>
+    Option 2) Geochemical analysis of water chemistry <br>
+</p>
+<form action="" method="post">
+{% for subfield in form.modelling_option %}
+    <tr>
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label }}</td>
+    </tr>
+{% endfor %}
+<p>
+{{form.submit()}}
+</p>
 {% endblock %}
