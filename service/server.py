@@ -38,13 +38,13 @@ def home():
     return render_template("index.html",form=data)
 
 
-@app.route('/sim2')
-def sim2():
-    data=Data_input_geochem()
-    if data.is_submitted():
-        result=request.form.to_dict()
-        if result[]='':
-            
+#@app.route('/sim2')
+#def sim2():#
+#    data=Data_input_geochem()
+#    if data.is_submitted():
+#        result=request.form.to_dict()
+#        if result[]='':
+
 
 
 @app.route('/notes')
@@ -103,7 +103,7 @@ def all_us_horizontal():
         return redirect('/co2_result_download')
     return render_template('all_us_horizontal.html',form=data)
 
-    
+
 
 @app.route('/horizontal_state',methods=['GET','POST'])
 def state_horizontal():
@@ -120,7 +120,7 @@ def state_horizontal():
         max_vert_depth=None
         user_job=str(randint(10000000, 99999999))
         session['user_job']=user_job
-        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile, 
+        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile,
         result['co2_depth'],min_vert_depth,max_vert_depth,result['land_correct'],result['US_state_select'],co2_US_county,co2_lon_lat,area,result['climate'],user_job))
         session['job_id']=job.id
         return redirect('/co2_result_download')
@@ -143,7 +143,7 @@ def county_horizontal():
         max_vert_depth=None
         user_job=str(randint(10000000, 99999999))
         session['user_job']=user_job
-        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile, 
+        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile,
         result['co2_depth'],min_vert_depth,max_vert_depth,result['land_correct'],result['US_state_select'],result['US_county'],co2_lon_lat,area,result['climate'],user_job))
         session['job_id']=job.id
         return redirect('/co2_result_download')
@@ -166,13 +166,13 @@ def custom_horizontal():
         print(co2_lon_lat)
         user_job=str(randint(10000000, 99999999))
         session['user_job']=user_job
-        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile, 
+        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile,
         result['co2_depth'],min_vert_depth,max_vert_depth,result['land_correct'],co2_US_state,co2_US_county,co2_lon_lat,area,result['climate'],user_job))
         session['job_id']=job.id
         return redirect('/co2_result_download')
     return render_template('custom_horizontal.html',form=data)
 
- 
+
 
 @app.route('/co2_result_download',methods=['GET','POST'])
 def download():
@@ -200,7 +200,7 @@ def vertical():
             return redirect('/vertical_custom')
         print(result)
     return render_template('vertical.html',form=data)
-  
+
 
 
 @app.route('/vertical_state',methods=['GET','POST'])
@@ -216,7 +216,7 @@ def state_vertical():
         co2_depth=300 #not used
         user_job=str(randint(10000000, 99999999))
         session['user_job']=user_job
-        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile, 
+        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile,
         co2_depth,result['min_vert_depth'],result['max_vert_depth'],result['land_correct'],result['US_state_select'],co2_US_county,co2_lon_lat,area,result['climate'],user_job))
         session['job_id']=job.id
         return redirect('/co2_result_download')
@@ -235,7 +235,7 @@ def county_vertical():
         co2_depth=300 #not used
         user_job=str(randint(10000000, 99999999))
         session['user_job']=user_job
-        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile, 
+        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile,
         co2_depth,result['min_vert_depth'],result['max_vert_depth'],result['land_correct'],result['US_state_select'],result['US_county'],co2_lon_lat,area,result['climate'],user_job))
         session['job_id']=job.id
         return redirect('/co2_result_download')
@@ -256,7 +256,7 @@ def custom_vertical():
         print(co2_lon_lat)
         user_job=str(randint(10000000, 99999999))
         session['user_job']=user_job
-        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile, 
+        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile,
         co2_depth,result['min_vert_depth'],result['max_vert_depth'],result['land_correct'],co2_US_state,co2_US_county,co2_lon_lat,area,result['climate'],user_job))
         session['job_id']=job.id
         return redirect('/co2_result_download')
@@ -266,11 +266,12 @@ def custom_vertical():
 
 
 #adding defunct text ading more texrt
-    
+
 if __name__ == '__main__':
     rawusgs, grad, sur = data_import.main()
+    medusgs = data_import_2.main(rawusgs, grad, su)
     app.run(host="0.0.0.0", port=8080,debug=True)
-    
+
     #print('hello')
     #print(S3_KEY)
     #print(S3_BUCKET)
