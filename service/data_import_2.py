@@ -4,6 +4,9 @@ import numpy as np
 import pandas as pd
 import sys
 
+geochem_result = 'INPUT_DATA/geochemical_result_files'
+
+
 def data_processing1(rawusgs):
 	"""Create a mean of the depth between the upper and lower peforations (ingnoring NaN
 	values). Concert to km. Append to database. Rename columns. Make a permant copy to new
@@ -153,6 +156,10 @@ def data_processing6(usgs1,sur,grad):
 	medusgs['TemperatureSMU']= (medusgs.Depth * medusgs.Grad) + medusgs.TempSur_celsius #Adding in the surface temperature correction
 	print('medusgs.head',medusgs.head(5))
 	print('medusgs=',len(medusgs))
+    medusgs.to_csv('s3://co-2-gasp-bucket/'+geochem_result+'/merged_data')
+
+    medusgs_read=medusgs.read_csv()
+    print(medusgs_read.head(5))
 	return medusgs
 
 
