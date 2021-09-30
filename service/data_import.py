@@ -27,7 +27,7 @@ def boto3_file_read(file):
 
 def boto3_download_results(file):
     url=boto3.client('s3').generate_presigned_url(
-    ClientMethod='get_object', 
+    ClientMethod='get_object',
     Params={'Bucket': 'co-2-gasp-bucket', 'Key': file},
     ExpiresIn=3600)
     print(url)
@@ -72,12 +72,23 @@ def MODIS_data_import():
     #print( 'lat n lon = ',sur[(sur.Lat == 41.1) & (sur.Lon == -79.7)])  # this one is fine
     return sur
 
+def medusgs_data_import(rawusgs,grad,sur):
+    if Merge_usgs_grad_T_F == True:
+        medusgs=data_import_2.main(rawusgs,grad,sur)
+    if Merge_usgs_grad_T_F == False:
+        medusgs=pd.read_csv('s3://co-2-gasp-bucket/'+geochem_result+'/merged_data')
+    return medusgs
+
+
+
 
 def main():
     rawusgs,geo =read_in_data()
     grad=run_geothermal_interpolate(geo)
     #data_processing(rawusgs)
     sur=MODIS_data_import()
-    return rawusgs, grad, sur
+    medusgs=medusgs_data_import(rawusgs,grad,sur)
+
+    return rawusgs, grad, sur, medusgs
 if __name__ == "__main__":
 	main()

@@ -269,8 +269,7 @@ def custom_vertical():
 #adding defunct text ading more texrt
 
 if __name__ == '__main__':
-    rawusgs, grad, sur = data_import.main()
-    medusgs = data_import_2.main(rawusgs, grad, sur)
+    rawusgs, grad, sur, medusgs = data_import.main()
     app.run(host="0.0.0.0", port=8080,debug=True)
 
     #print('hello')

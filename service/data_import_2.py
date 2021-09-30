@@ -157,7 +157,6 @@ def data_processing6(usgs1,sur,grad):
 	print('medusgs.head',medusgs.head(5))
 	print('medusgs=',len(medusgs))
 	medusgs.to_csv('s3://co-2-gasp-bucket/'+geochem_result+'/merged_data', index=False)
-	medusgs_read=pd.read_csv('s3://co-2-gasp-bucket/'+geochem_result+'/merged_data')
 	print(medusgs_read.head(5))
 	return medusgs
 
