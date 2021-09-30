@@ -7,6 +7,7 @@ from data_import import boto3_download_results
 #Geochemical code
 import data_import
 import data_import_2
+import carbon_capture
 from CO2_density_state import main as CO2_density_state_MAIN
 from co2_gasp_run_options import *     #import the option file from within the same folder
 from redis import Redis
@@ -270,6 +271,7 @@ def custom_vertical():
 
 if __name__ == '__main__':
     rawusgs, grad, sur, medusgs = data_import.main()
+    carbon_capture.main()
     app.run(host="0.0.0.0", port=8080,debug=True)
 
     #print('hello')

@@ -5,6 +5,8 @@ import sys
 
 data='INPUT_DATA'
 dolomite_stats='INPUT_DATA/dolomite_stats'
+geochemical_result='/home/ec2-user/environment/CO2_GASP_PROGRAM/temp/OUTPUT_DATA/geochemical_result'
+
 
 def depth_RI(experi,smallusgs):
 	RI_vals = pd.read_csv('s3://co-2-gasp-bucket/'+dolomite_stats+'/DepthID_RI.csv',sep=',',header=0,usecols=list(range(4)))
@@ -35,10 +37,10 @@ def depth_RI(experi,smallusgs):
 	return DepthID_VALS_v2,RI_vals
 
 
-def phreeqc_carb_capt_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals):
+def phreeqc_carb_capt_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals,user_job):
 	"""For use in calculating the equilibrium constants"""
 	smallusgs = smallusgs.rename(columns={'ID': 'Number','LITHOLOGY':'Description'})
-	with open('s3://co-2-gasp-bucket/'+dolomite_stats+'/Carb_capt_v1_pre_eq.txt', 'w') as f:
+	with open(geochemical_result+'/'+user_job+'/Carb_capt_v1_pre_eq.txt', 'w') as f:
 		f.write('\n \n \n')
 		f.write('PHASES \n')
 		for i in range(len(RI_vals)):
@@ -50,19 +52,19 @@ def phreeqc_carb_capt_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals):
 			f.write('-Vm 64.5 \n')
 			f.write('\n')
 
-	with open(data_import.temp+'/Carb_capt_v1_pre_eq.txt', 'a') as f:
+	with open(geochemical_result+'/'+user_job+'/Carb_capt_v1_pre_eq.txt', 'a') as f:
 			f.write('TITLE USGS Produced Water Database with new phases \n')
 			f.write('SOLUTION_SPREAD \n')
 			f.write('Units mg/l \n ')
 
-	smallusgs.to_csv(data_import.temp+'/Carb_capt_v1_pre_eq.txt', header=True, index=False, mode='a', sep='\t')
+	smallusgs.to_csv(geochemical_result+'/'+user_job+'/Carb_capt_v1_pre_eq.txt', header=True, index=False, mode='a', sep='\t')
 
 	RI_vals_list=[]
 	for i in range(len(RI_vals)):
 		RI_vals_list.append('Dolomite_%s '% RI_vals.iloc[i,0])
 	print(RI_vals_list)
 
-	with open(data_import.temp+'/Carb_capt_v1_pre_eq.txt', 'a') as f:
+	with open(geochemical_result+'/'+user_job+'/Carb_capt_v1_pre_eq.txt', 'a') as f:
 			f.write('\n \n')
 			f.write('SELECTED_OUTPUT \n')
 			f.write('-file Carb_capt_out_co2_pre_eq.sel \n')
@@ -76,7 +78,7 @@ def phreeqc_carb_capt_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals):
 			for i in range(len(RI_vals_list)):
 				f.write('%s'  % RI_vals_list[i] )
 
-	with open(data_import.temp+'/Carb_capt_v1_pre_eq.txt', 'a') as f:
+	with open(geochemical_result+'/'+user_job+'/Carb_capt_v1_pre_eq.txt', 'a') as f:
 		for i in range(len(smallusgs)):
 			f.write('\n \n')
 			f.write('USE SOLUTION %i \n' % experi.iloc[i,1])
@@ -99,3 +101,12 @@ def phreeqc_carb_capt_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals):
 			f.write('Calcite 0.0 100.0 \n')
 			f.write('CO2(g) %.2f 10000 \n'% np.log10(experi.iloc[i,2]))  #partial pressure drop by 20%
 			f.write('END \n')
+			
+
+def main(experi,smallusgs,eq_constants_value,user_job):
+	DepthID_VALS_v2,RI_vals=depth_RI(experi,smallusgs)
+	phreeqc_carb_capt_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals,user_job)
+
+
+if __name__ == "__main__":
+	main(experi,smallusgs,eq_constants_value,user_job))
