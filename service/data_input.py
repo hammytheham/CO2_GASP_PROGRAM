@@ -10,6 +10,12 @@ class Index_page(FlaskForm):
     modelling_option=RadioField(choices=modelling_option_choices)
     submit=SubmitField('Submit parameters')
 
+
+class Data_input_geochem(FlaskForm):
+    modelling_option_choices=['Option 1', 'Option 2']
+    modelling_option=RadioField(choices=modelling_option_choices)
+    submit=SubmitField('Submit parameters')
+
 class Data_input(FlaskForm):
     'For co2 density/state and geothermal gradient'
     #co2_profile=StringField

@@ -138,12 +138,12 @@ def data_processing2(usgs):
 def data_processing6(usgs1,sur,grad):
 	"""Merge the dataframes into a single dataframe called medusgs
 	"""
-	print('usgs2 = ',len(usgs2))
+	print('usgs2 = ',len(usgs1))
 	medusgs=usgs1.merge(sur,on=['Lat','Lon'])
 	print('medusgs =',len(medusgs))
 	medusgs=grad.merge(medusgs,on=['Lat','Lon'])
 	print('medusgs with grad =',len(medusgs))
-	print((len(medusgs)/len(usgs2))*100)
+	print((len(medusgs)/len(usgs1))*100)
 
 	print('Sandstone=',len(medusgs[medusgs.LITHOLOGY == 'Sandstone']),(len(medusgs[medusgs.LITHOLOGY == 'Sandstone'])/len(medusgs))*100)
 	print('Dolomite=',len(medusgs[medusgs.LITHOLOGY == 'Dolomite']),(len(medusgs[medusgs.LITHOLOGY == 'Dolomite'])/len(medusgs))*100)
@@ -161,7 +161,7 @@ def main(rawusgs,grad,sur):
 	usgs=data_processing1(rawusgs)
 	usgs1=data_processing2(usgs)
 	medusgs=data_processing6(usgs1,sur,grad)
-    sys.exit()
+	sys.exit()
 	return medusgs
 
 if __name__ == "__main__":
