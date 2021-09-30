@@ -30,3 +30,4 @@ min_max_vert_depth=[1,3000] #m - note do not set to zero as it wont work, minimu
 #code_validation options - most by default false as repetitive
 geo_interp_T_F = False #run interpolation - default false
 MODIS_process_T_F = False  #run download of MODIS data and subsequent processing - default is false
+Merge_usgs_grad_T_F = False

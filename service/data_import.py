@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import geotherm_interpolate
 import data_processing_1
+import data_import_2
 from co2_gasp_run_options import *     #import the option file from within the same folder
 import ModisData
 import boto3
@@ -13,6 +14,7 @@ data='INPUT_DATA'
 #directory='/Users/hamish/github/co2_gasp'
 geotherm_result = 'INPUT_DATA/geothermal_result_files'
 MODIS_results = 'INPUT_DATA/MODIS_result_files'
+geochem_result = 'INPUT_DATA/geochemical_result_files'
 
 #this method is now mostly defunct....probably...can use S3 like local filesystem....mostly....
 def boto3_file_read(file):
@@ -77,6 +79,7 @@ def medusgs_data_import(rawusgs,grad,sur):
         medusgs=data_import_2.main(rawusgs,grad,sur)
     if Merge_usgs_grad_T_F == False:
         medusgs=pd.read_csv('s3://co-2-gasp-bucket/'+geochem_result+'/merged_data')
+        print(medusgs.head(5))
     return medusgs
 
 
@@ -88,7 +91,7 @@ def main():
     #data_processing(rawusgs)
     sur=MODIS_data_import()
     medusgs=medusgs_data_import(rawusgs,grad,sur)
-
     return rawusgs, grad, sur, medusgs
+
 if __name__ == "__main__":
 	main()
