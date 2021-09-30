@@ -1,6 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, RadioField
 
+class Download(FlaskForm):
+    submit=SubmitField('Download files')
+
+
 class Index_page(FlaskForm):
     modelling_option_choices=['Option 1', 'Option 2']
     modelling_option=RadioField(choices=modelling_option_choices)
@@ -34,10 +38,19 @@ class Data_input(FlaskForm):
 
     land_correct=StringField('Landsurface correction')
 
-    min_vert_depth=StringField('Minimum vertical depth')
+    min_vert_depth=StringField('Minimum vertical depth (m) -- y-axis minimum')
     
-    max_vert_depth=StringField('Maximum vertical depth')
+    max_vert_depth=StringField('Maximum vertical depth (m) -- y-axis maximum')
 
+    lat_bounding=StringField('Latitude coordinates of corners of bounding box. Comma seperated values (e.g 30,32,32,30)')
+
+    lon_bounding=StringField('Longitude coordinates of bounding box. Comma seperated values (e.g -101,-101,-98,-98)')
+
+    climate=StringField('')
+
+    Selectclimate_choices=[True,False]
+    climate=RadioField('Plot land surface correction?',choices=Selectclimate_choices)
+   
     submit=SubmitField('Submit parameters')
 
 

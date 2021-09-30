@@ -12,3 +12,7 @@ dependencies:
   - geopandas
   - matplotlib
   - pydap
+  - s3fs
+  - fsspec
+  - rq
+  - reddis

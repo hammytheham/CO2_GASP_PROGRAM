@@ -1,0 +1,28 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+<h2> Horizontal Geothermal / CO2 profile - State level </h2>
+<form action="" method="post">
+<p>
+{{form.US_state_select.label}}<br>
+{{form.US_state_select}}<br>
+</p>
+<p>
+{{form.co2_depth.label}}<br>
+{{form.co2_depth}}<br>
+</p>
+<p>
+{{form.climate.label}}<br>
+{{form.climate}}<br>
+</p>
+<p>
+{{form.land_correct.label}}<br>
+{{form.land_correct}}<br>
+</p>
+<p>
+{{form.submit()}}
+</p>
+</form>
+
+{% endblock %}

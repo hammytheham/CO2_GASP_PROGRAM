@@ -1,0 +1,32 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+<h2> Horizontal Geothermal / CO2 profile - Custom </h2>
+<form action="" method="post"> 
+<p>
+{{form.lat_bounding.label}}<br>
+{{form.lat_bounding}}<br>
+</p>    
+<p>
+{{form.lon_bounding.label}}<br>
+{{form.lon_bounding}}<br>
+</p>    
+<p>
+{{form.co2_depth.label}}<br>
+{{form.co2_depth}}<br>
+</p>
+<p>
+{{form.climate.label}}<br>
+{{form.climate}}<br>
+</p>
+<p>
+{{form.land_correct.label}}<br>
+{{form.land_correct}}<br>
+</p>
+<p>
+{{form.submit()}}
+</p>
+</form>
+
+{% endblock %}
