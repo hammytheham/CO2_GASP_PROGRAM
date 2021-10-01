@@ -31,7 +31,7 @@ def depth_RI(experi,smallusgs):
 	#print(experi)
 	#print(smallusgs)
 
-	#print(DepthID_VALS_v2.head(10))
+	print(DepthID_VALS_v2.head(10))
 
 	#print(smallusgs.head(10))
 	return DepthID_VALS_v2,RI_vals
@@ -104,9 +104,15 @@ def phreeqc_carb_capt_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals,user_job):
 			
 
 def main(experi,smallusgs,eq_constants_value,user_job):
+	os.mkdir(geochemical_result+'/'+user_job)
+	experi['ID_11480']=experi['ID']+len(experi)
+	experi['ID_22960']=experi['ID']+(len(experi)*2)
+	print(experi)
 	DepthID_VALS_v2,RI_vals=depth_RI(experi,smallusgs)
+	smallusgs.to_csv(geochemical_result+'smallusgs')
+	print(len(DepthID_VALS_v2))
 	phreeqc_carb_capt_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals,user_job)
 
 
 if __name__ == "__main__":
-	main(experi,smallusgs,eq_constants_value,user_job))
+	main(experi,smallusgs,eq_constants_value,user_job)

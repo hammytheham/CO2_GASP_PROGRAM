@@ -271,7 +271,8 @@ def custom_vertical():
 
 if __name__ == '__main__':
     rawusgs, grad, sur, medusgs = data_import.main()
-    carbon_capture.main()
+    user_job=str(1010111)
+    carbon_capture.main(rawusgs, grad, sur,user_job)
     app.run(host="0.0.0.0", port=8080,debug=True)
 
     #print('hello')

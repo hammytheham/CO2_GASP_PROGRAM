@@ -9,8 +9,9 @@ def subsetting_pressure(medusgs):
 	pw=(1+(42745*0.695e-6))*1000 #kg/m3
 
 	medusgs['pressure']=(medusgs['Depth']*1000 * 9.81 * pw)/101325  #used to be 2700 for lithostatic pressure
+	print(medusgs.columns.values)
 
-
+	medusgs['Temp']=medusgs['TEMP']
 	smallusgs=medusgs.loc[:,['TemperatureSMU','LITHOLOGY','PH','Temp',
 	       'B', 'Ba',
 	       'Br', 'CO2', 'CO3', 'HCO3', 'Ca', 'Cl',
