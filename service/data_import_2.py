@@ -5,6 +5,7 @@ import pandas as pd
 import sys
 
 geochem_result = 'INPUT_DATA/geochemical_result_files'
+geochemical_input='/home/ec2-user/environment/INPUT_DATA/geochemical_result'
 
 
 def data_processing1(rawusgs):
@@ -147,6 +148,39 @@ def data_processing6(usgs1,sur,grad):
 	medusgs=grad.merge(medusgs,on=['Lat','Lon'])
 	print('medusgs with grad =',len(medusgs))
 	print((len(medusgs)/len(usgs1))*100)
+
+	print(medusgs.FIELD.head(30))
+	unknown_field_list=[]
+	for i in list(range(len(medusgs[medusgs['FIELD'].isnull()]))):
+		val='unknown_field_'+str(i)
+		unknown_field_list.append(val)
+	#print(unknown_field_list)
+	medusgs.loc[medusgs['FIELD'].isnull(),'FIELD']=unknown_field_list
+	
+	from string import ascii_uppercase
+	import itertools
+
+
+	def iter_all_strings():
+		size = 1
+		while True:
+			for s in itertools.product(ascii_uppercase, repeat=size):
+				yield "".join(s)
+			size +=1
+	a=[]
+	for s in iter_all_strings():
+		a.append(s)
+		if len(a) == len(medusgs.FIELD.unique()):
+			break
+
+	with open(geochemical_input+'/FIELD_unique.txt', 'w') as f: #change from backup if neccessary
+		f.write("{")
+		for i in list(range(len(medusgs.FIELD.unique()))):
+			f.write('"%(spss)s" : "%(a)s", \n'  %{'spss':medusgs.FIELD.unique()[i],'a':a[i]})
+		f.write("}") #note need to read in formated version i.e. lose last comma
+
+	sys.exit()
+
 
 	print('Sandstone=',len(medusgs[medusgs.LITHOLOGY == 'Sandstone']),(len(medusgs[medusgs.LITHOLOGY == 'Sandstone'])/len(medusgs))*100)
 	print('Dolomite=',len(medusgs[medusgs.LITHOLOGY == 'Dolomite']),(len(medusgs[medusgs.LITHOLOGY == 'Dolomite'])/len(medusgs))*100)
