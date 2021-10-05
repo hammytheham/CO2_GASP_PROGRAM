@@ -26,7 +26,7 @@ def main(rawusgs,grad,sur,user_job,geochem_minerals):
     print(path_to_user)
     phreeqc_execute.main(eq_constants_value,path_to_user)
     ##print("running eq_constants")  #turn back on!!
-    carb_cap.main(smallusgs,medusgs)
+    carb_cap.main(smallusgs,medusgs,user_job)
 
 if __name__ == '__main__':
     main(rawusgs,grad,sur,user_job,geochem_minerals)
