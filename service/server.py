@@ -1,13 +1,13 @@
 from flask import Flask, render_template, redirect, request, url_for, session
 import boto3
 from config import S3_KEY, S3_SECRET, S3_BUCKET
-from data_input import Data_input,Data_input_geochem, Index_page, Download
+from data_input import Data_input,Data_input_geochem, Index_page, Download,PhreeqcOptions
 import sys
 from data_import import boto3_download_results
 #Geochemical code
 import data_import
 import data_import_2
-import carbon_capture
+from carbon_capture import main as carbon_capture_MAIN
 from CO2_density_state import main as CO2_density_state_MAIN
 from co2_gasp_run_options import *     #import the option file from within the same folder
 from redis import Redis
@@ -40,14 +40,66 @@ def home():
     return render_template("index.html",form=data)
 
 
-#@app.route('/sim2')
-#def sim2():#
-#    data=Data_input_geochem()
-#    if data.is_submitted():
-#        result=request.form.to_dict()
-#        if result[]='':
+pitzer_mineral_map= {'Akermanite (Ca2MgSi2O7)': 'Akermanite','Anhydrite (CaSO4)': 'Anhydrite',
+'Anthophyllite (Mg7Si8O22(OH)2)': 'Anthophyllite','Antigorite (Mg48Si34O85(OH)62)': 'Antigorite',
+'Aragonite (CaCO3)': 'Aragonite','Arcanite (K2SO4)': 'Arcanite','Artinite (Mg2CO3(OH)2:3H2O)': 'Artinite',
+'Barite (BaSO4)': 'Barite','Bischofite (MgCl2:6H2O)': 'Bischofite','Bloedite (Na2Mg(SO4)2:4H2O)': 'Bloedite',
+'Brucite (Mg(OH)2)': 'Brucite','Burkeite (Na6CO3(SO4)2)': 'Burkeite','Calcite (CaCO3)': 'Calcite',
+'Carnallite (KMgCl3:6H2O)': 'Carnallite','Celestite (SrSO4)': 'Celestite','Chalcedony (SiO2)': 'Chalcedony',
+'Chrysotile (Mg3Si2O5(OH)4)': 'Chrysotile','Diopside (CaMgSi2O6)': 'Diopside','Dolomite (CaMg(CO3)2)': 'Dolomite',
+'Enstatite (MgSiO3)': 'Enstatite','Epsomite (MgSO4:7H2O)': 'Epsomite','Forsterite (Mg2SiO4)': 'Forsterite',
+'Gaylussite (CaNa2(CO3)2:5H2O)': 'Gaylussite','Glaserite (NaK3(SO4)2)': 'Glaserite',
+'Glauberite (Na2Ca(SO4)2)': 'Glauberite','Goergeyite (K2Ca5(SO4)6H2O)': 'Goergeyite','Gypsum (CaSO4:2H2O)': 'Gypsum',
+'Halite (NaCl)': 'Halite','Hexahydrite (MgSO4:6H2O)': 'Hexahydrite','Huntite (CaMg3(CO3)4)': 'Huntite',
+'Kainite (KMgClSO4:3H2O)': 'Kainite','Kalicinite (KHCO3)': 'Kalicinite','Kieserite (MgSO4:H2O)': 'Kieserite',
+'Labile_S (Na4Ca(SO4)3:2H2O)': 'Labile_S','Leonhardite (MgSO4:4H2O)': 'Leonhardite',
+'Leonite (K2Mg(SO4)2:4H2O)': 'Leonite','Magnesite (MgCO3)': 'Magnesite','MgCl2_2H2O (MgCl2:2H2O)': 'MgCl2_2H2O',
+'MgCl2_4H2O (MgCl2:4H2O)': 'MgCl2_4H2O','Mirabilite (Na2SO4:10H2O )': 'Mirabilite',
+'Misenite (K8H6(SO4)7)': 'Misenite','Nahcolite (NaHCO3)': 'Nahcolite','Natron (Na2CO3:10H2O)': 'Natron',
+'Nesquehonite (MgCO3:3H2O)': 'Nesquehonite','Pentahydrite (MgSO4:5H2O)': 'Pentahydrite',
+'Pirssonite (Na2Ca(CO3)2:2H2O)': 'Pirssonite','Polyhalite (K2MgCa2(SO4)4:2H2O) ': 'Polyhalite',
+'Portlandite (Ca(OH)2)': 'Portlandite','Quartz (SiO2)': 'Quartz','Schoenite (K2Mg(SO4)2:6H2O)': 'Schoenite',
+'Sepiolite(d) (Mg2Si3O7.5OH:3H2O)': 'Sepiolite(d)','Sepiolite (Mg2Si3O7.5OH:3H2O)': 'Sepiolite',
+'SiO2(a) (SiO2) ': 'SiO2(a)','Sylvite (KCl)': 'Sylvite','Syngenite (K2Ca(SO4)2:H2O)': 'Syngenite',
+'Talc (Mg3Si4O10(OH)2)': 'Talc','Thenardite (Na2SO4)': 'Thenardite','Trona (Na3H(CO3)2:2H2O)': 'Trona',
+'Borax (Na2(B4O5(OH)4):8H2O)': 'Borax','Boric_acid,s (B(OH)3)': 'Boric_acid,s',
+'KB5O8:4H2O (KB5O8:4H2O)': 'KB5O8:4H2O','K2B4O7:4H2O (K2B4O7:4H2O)': 'K2B4O7:4H2O',
+'NaBO2:4H2O (NaBO2:4H2O)': 'NaBO2:4H2O','NaB5O8:5H2O (NaB5O8:5H2O)': 'NaB5O8:5H2O',
+'Teepleite':'Na2B(OH)4Cl'}
 
+mineral_keys=['mineral_select_1','mineral_select_2','mineral_select_3','mineral_select_4','mineral_select_5',
+'mineral_select_6','mineral_select_7','mineral_select_8','mineral_select_9','mineral_select_10',
+'mineral_select_11']
+moles_keys=['moles_1','moles_2','moles_3','moles_4','moles_5','moles_6','moles_7','moles_8','moles_9','moles_10','moles_11']
 
+def return_key(val):
+    for key, value in pitzer_mineral_map.items():
+        if key==val:
+            return value
+    return('Key Not Found')
+
+@app.route('/sim2',methods=['GET','POST'])
+def sim2():#
+    data=PhreeqcOptions()
+    if data.is_submitted():
+        result=request.form.to_dict()
+        keys=[result[x] for x in mineral_keys]
+        keys=[x for x in keys if x]
+        a=[]
+        for i in keys:
+            if i == 'Dolomite':
+                a.append('Dolomite_new')
+            else:
+                a.append(return_key(i))
+        print(a)
+        values=[result[x] for x in moles_keys]
+        values=[x for x in values if x]
+        geochem_minerals=dict(zip(a,values))
+        user_job=str(randint(10000000, 99999999))
+        session['user_job']=user_job
+        job = q.enqueue(carbon_capture_MAIN, args=(rawusgs, grad, sur,user_job,geochem_minerals))
+        session['job_id']=job.id
+    return render_template("geochem_selections.html",form=data)
 
 @app.route('/notes')
 def notes():
@@ -271,8 +323,6 @@ def custom_vertical():
 
 if __name__ == '__main__':
     rawusgs, grad, sur, medusgs = data_import.main()
-    user_job=str(1010111)
-    carbon_capture.main(rawusgs, grad, sur,user_job)
     app.run(host="0.0.0.0", port=8080,debug=True)
 
     #print('hello')

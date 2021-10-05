@@ -1,4 +1,4 @@
-
+import json
 import os
 import numpy as np
 import pandas as pd
@@ -119,28 +119,31 @@ def data_processing2(usgs):
 	lith = lith[lith.LITHOLOGY != 'Unknown']
 	print('lith fail',100-((len(lith)/len(usgs))*100))
 	#Sequential cull
-	print('usgs=',len(usgs))
-	usgs=usgs[(usgs.PH >= 3.5 ) & (usgs.PH <= 11 )]
-	print('usgs ph=',len(usgs))
-	usgs=usgs[(usgs.chargebalance >= -15.0 ) & (usgs.chargebalance <= 15.0 )]
-	print('usgs chargebalance=',len(usgs))
-	usgs=usgs[(usgs.Mg > 0.0 ) & (usgs.Ca > 0.0 )]
-	print('usgs non-zero Mg Ca=',len(usgs))
-	usgs=usgs[(usgs.Depth > 0.0)]
-	print('usgs depth=',len(usgs))
-	usgs=usgs[(usgs.Lat > 0.0) & (usgs.Lon < 0.0)]
-	print('usgs lat-lon=',len(usgs))
-	usgs=usgs.loc[~(pd.isnull(usgs.LITHOLOGY))] #not ~ null lithology
-	print('usgs lithology=',len(usgs))
-	usgs=usgs.round({'Lat':1,'Lon':1})
-	print("percent remaining", len(usgs), 1 - len(usgs)/165960 )
-	usgs1=usgs.copy()
+	print('lith=',len(lith))
+	lith=lith[(lith.PH >= 3.5 ) & (lith.PH <= 11 )]
+	print('lith ph=',len(lith))
+	lith=lith[(lith.chargebalance >= -15.0 ) & (lith.chargebalance <= 15.0 )]
+	print('lith chargebalance=',len(lith))
+	lith=lith[(lith.Mg > 0.0 ) & (lith.Ca > 0.0 )]
+	print('lith non-zero Mg Ca=',len(lith))
+	lith=lith[(lith.Depth > 0.0)]
+	print('lith depth=',len(lith))
+	lith=lith[(lith.Lat > 0.0) & (lith.Lon < 0.0)]
+	print('lith lat-lon=',len(lith))
+	lith=lith.loc[~(pd.isnull(lith.LITHOLOGY))] #not ~ null lithology
+	print('lith lithology=',len(lith))
+	lith=lith.round({'Lat':1,'Lon':1})
+	print("percent remaining", len(lith), 1 - len(lith)/165960 )
+	usgs1=lith.copy()
 	print('usgs1=',len(usgs1))
 	return usgs1
 
 
+
 def data_processing6(usgs1,sur,grad):
 	"""Merge the dataframes into a single dataframe called medusgs
+	currently the field mapping section is working but generating inaccurate results relativel yot the original codes so 
+	is unused at present
 	"""
 	print('usgs2 = ',len(usgs1))
 	medusgs=usgs1.merge(sur,on=['Lat','Lon'])
@@ -173,13 +176,26 @@ def data_processing6(usgs1,sur,grad):
 		if len(a) == len(medusgs.FIELD.unique()):
 			break
 
-	with open(geochemical_input+'/FIELD_unique.txt', 'w') as f: #change from backup if neccessary
-		f.write("{")
-		for i in list(range(len(medusgs.FIELD.unique()))):
-			f.write('"%(spss)s" : "%(a)s", \n'  %{'spss':medusgs.FIELD.unique()[i],'a':a[i]})
-		f.write("}") #note need to read in formated version i.e. lose last comma
+	#with open(geochemical_input+'/FIELD_unique.txt', 'w') as f: #change from backup if neccessary
+	#	f.write("{")
+	#	for i in list(range(len(medusgs.FIELD.unique()))):
+	#		f.write('"%(spss)s" : "%(a)s", \n'  %{'spss':medusgs.FIELD.unique()[i],'a':a[i]})
+	#	f.write("}") #note need to read in formated version i.e. lose last comma
 
-	sys.exit()
+	with open(geochemical_input+'/FIELD_unique.txt') as f:
+		data = f.read()
+	field_1 = json.loads(data)
+
+	with open(geochemical_input+'/FIELD_unique_backup_backup.txt') as f:
+		data = f.read()
+	field_2 = json.loads(data)
+
+	dictionary=dict(field_1, **field_2) 
+
+	with open(geochemical_input+'/FIELD_all_fields.txt', 'w') as f:
+		f.write(json.dumps(dictionary))
+	#print(dictionary)
+	
 
 
 	print('Sandstone=',len(medusgs[medusgs.LITHOLOGY == 'Sandstone']),(len(medusgs[medusgs.LITHOLOGY == 'Sandstone'])/len(medusgs))*100)
@@ -190,15 +206,23 @@ def data_processing6(usgs1,sur,grad):
 	medusgs['TemperatureSMU']= (medusgs.Depth * medusgs.Grad) + medusgs.TempSur_celsius #Adding in the surface temperature correction
 	print('medusgs.head',medusgs.head(5))
 	print('medusgs=',len(medusgs))
+	
+	di=dictionary
+	print(di)
+	print(medusgs.columns.values)
+	medusgs.FIELD_code=medusgs.FIELD.map(di)
+	medusgs['DepthID']=medusgs.FIELD_code+medusgs.groupby('FIELD')['TemperatureSMU'].apply(lambda x:x.astype('category').cat.codes).astype(str)
+	print(medusgs[['DepthID','FIELD']].head(20)) 
 	medusgs.to_csv('s3://co-2-gasp-bucket/'+geochem_result+'/merged_data', index=False)
 	return medusgs
 
 
 
 def main(rawusgs,grad,sur):
-	usgs=data_processing1(rawusgs)
-	usgs1=data_processing2(usgs)
-	medusgs=data_processing6(usgs1,sur,grad)
+	#usgs=data_processing1(rawusgs)
+	#usgs1=data_processing2(usgs)
+	#medusgs=data_processing6(usgs1,sur,grad)
+	medusgs=pd.read_csv('s3://co-2-gasp-bucket/'+geochem_result+'/merged_data')
 	return medusgs
 
 if __name__ == "__main__":
