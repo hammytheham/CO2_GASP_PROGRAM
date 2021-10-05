@@ -20,12 +20,27 @@ import matplotlib.ticker as ticker
 
 geochemical_result='/home/ec2-user/environment/CO2_GASP_PROGRAM/temp/OUTPUT_DATA/geochemical_result'
 
-def read_in():
-	carb_co2_pre_eq = pd.read_csv(geochemical_result+'/'+user_job+'/Carb_capt_user_job.sel',sep='\t', skiprows=[i for j in (range(1, 11482), range(11483,34442,2)) for i in j],skipinitialspace=True,header=0) #present equilibrium
-	print(carb_co2_pre_eq.head(10))
-	print(carb_co2_pre_eq.tail(10))
-
+def read_in(user_job):
+	carb_co2_pre_eq = pd.read_csv(geochemical_result+'/'+str(user_job)+'/Carb_capt_user_job.sel',sep='\t',skipinitialspace=True,header=0) #present equilibrium
+	#carb_co2_pre_eq = pd.read_csv(geochemical_result+'/'+user_job+'/Carb_capt_user_job.sel',sep='\t', skiprows=[i for j in (range(1, 11482), range(11483,34442,2)) for i in j],skipinitialspace=True,header=0) #present equilibrium
+	initial_chem=carb_co2_pre_eq.iloc[:(int(len(carb_co2_pre_eq)/3))]
+	#print(initial_chem.head(10))
+	#print(initial_chem.tail(10))
+	init_equi=carb_co2_pre_eq.iloc[(int(len(carb_co2_pre_eq)/3)):(int(len(carb_co2_pre_eq))-1):2]
+	fin_equi=carb_co2_pre_eq.iloc[((int(len(carb_co2_pre_eq)/3))+1):int(len(carb_co2_pre_eq)):2]
+	#print(init_equi.head(10))
+	#print(init_equi.tail(10))
+	#print(fin_equi.head(10))
+	#print(fin_equi.tail(10))	
+	
 	return carb_co2_pre_eq
+
+def poro_converter()
+	
+
+
+
+
 
 def data_processing_1(carb,carb_co2,main_dolomite,order_dolomite,disorder_dolomite,sim_1,sim_2,sim_pre,sim_1_ref,sim_2_ref,dis_dolomite_no_co,ord_dolomite_no_co,main_dolomite_no_co,C02_no_mineral,low_temp_high_temp_no_min_sim_1,low_temp_high_temp_no_min_sim_2,initial,carb_co2_pre_eq,main_dolomite_pre_eq,order_dolomite_pre_eq,disorder_dolomite_pre_eq,sim_1_old,sim_2_old,smallusgs,medusgs):
 	RI_vals = pd.read_csv(data_import.temp+'/DepthID_RI.csv',sep=',',header=0,usecols=list(range(3)))
@@ -1795,9 +1810,9 @@ def co2_vs_min(mass_bal_lith):
 
 
 
-def main(smallusgs,medusgs):
+def main(smallusgs,medusgs,user_job):
 
-	carb_co2_pre_eq = read_in()
+	carb_co2_pre_eq = read_in(user_job)
 	#mass_bal_lith=data_processing_1(carb,carb_co2,main_dolomite,order_dolomite,disorder_dolomite,sim_1,sim_2,sim_pre,sim_1_ref,sim_2_ref,dis_dolomite_no_co,ord_dolomite_no_co,main_dolomite_no_co,C02_no_mineral,low_temp_high_temp_no_min_sim_1,low_temp_high_temp_no_min_sim_2,initial,carb_co2_pre_eq,main_dolomite_pre_eq,order_dolomite_pre_eq,disorder_dolomite_pre_eq,sim_1_old,sim_2_old,smallusgs,medusgs)
 
 	#mass_bal_lith=pd.read_csv(data_import.temp+'/pre_co2_sequestration.txt', header=0,  sep='\t') #pre_co2_sequestration_v2

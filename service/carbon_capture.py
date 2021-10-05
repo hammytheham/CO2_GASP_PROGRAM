@@ -24,8 +24,9 @@ def main(rawusgs,grad,sur,user_job,geochem_minerals):
     print("running phreeqc_execute")
     path_to_user=geochemical_result+'/'+user_job
     print(path_to_user)
-    phreeqc_execute.main(eq_constants_value,path_to_user)
+    #phreeqc_execute.main(eq_constants_value,path_to_user)
     ##print("running eq_constants")  #turn back on!!
+    user_job=89542475 #fix user_job for testing purposes and not having to resim
     carb_cap.main(smallusgs,medusgs,user_job)
 
 if __name__ == '__main__':
