@@ -31,11 +31,12 @@ def read_in(user_job):
 	#print(init_equi.head(10))
 	#print(init_equi.tail(10))
 	#print(fin_equi.head(10))
-	#print(fin_equi.tail(10))	
+	#print(fin_equi.tail(10))	s
 	
 	return carb_co2_pre_eq
 
-def poro_converter()
+def poro_converter():
+	
 	
 
 
