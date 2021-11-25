@@ -1,0 +1,20 @@
+{% extends "base.html"%}
+
+{% block content %}
+<h2 id="Introduction_header"> 1 Introduction </h2>
+<div>This program, CO<sub>2</sub>-GASP (CO<sub>2</sub> geochemcial assessment of seqeustration potential), is desgined to enable users to quickly evaluate and simulate CO<sub>2</sub> seqeustration. Specifically the program can either a) calculate the CO<sub>2</sub> free state density and physical state (e.g. liquid/gas/supercritical fluid) or b) simulate reactions occuring between injected CO<sub>2</sub>, the target groundwater at formation-depth temperature/pressure conditions and a mineralogy representative of the host formation/potential secondary minerals. The spatial scope of the program is the contiguous US states (lower 48).<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;The core methodology of this project couples the USGS Produced Water database (Blondes et al., 2016) (PWGD), to MODIS satellite derived land surface temperatures (Bechtel, 2015) (MODIS) and this study's interpolation of geothermal gradient data contained in the the SMU Heatflow database (Blackwell et al., 2011) (SMUH) (<a href="#fig_method">fig.1</a>).
+
+
+<figure id="fig_method">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/methodology_coupling.png" alt="methodology_coupling" style="width:80%">
+  <figcaption> Fig.1 - Visualization of the coupled methodology and data sources; clockwise from top the MODIS land surface temperature data, geothermal gradient data (SMUH) and the produced water data (PWGD). 
+  </figcaption>
+</figure>
+
+&nbsp;&nbsp;&nbsp;&nbsp;The first result from this methodology has been the generation of a new solubility constant for dolomite (Robertson et al., 2021). Robertson et al. (2021) involved extensive groundtruthing of the coupling of these datasets and, alongside key findings, we reproduce this <a href="Robertson_et_al">here</a>. <br>
+</div>
+
+<center><a href="/about"> << About</a> <b>|   <a href="/about"> CONTENTS </a>   |</b> <a href="/Methodology_heading">Methodology >></a>
+{% endblock %}

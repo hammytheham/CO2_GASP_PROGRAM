@@ -1,9 +1,20 @@
 {% extends "base.html"%}
 
 {% block content %}
-
-<h2> Horizontal Geothermal / CO2 profile - Custom </h2>
+<div id="loading">
+    <div><br><br><br> Your simulation is running and the download will commence automatically. This can take up to several minutes. Once it has downloaded click <a href="/">here</a> to return to the home screen.</div>
+</div>
+<div id="content">
+<h2> Horizontal Geothermal / CO<sub>2</sub> profile - Custom </h2
 <form action="" method="post"> 
+<div>
+This filter generates geothermal and CO<sub>2</sub> horizontal profiles for a custom user specified area (bounding box). <br>
+The minimum number of vertices for the bounding box is 4; i.e. a rectangular bounding box (additional vertices can be specified). For a rectangular box seperately enter the 4 latitude and 4 longitude coordinates seperated by a comma.<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;For example for a bounding box with vertices of (30, -101), (32,-101), (32,-98) and (30,-98); <br>
+For latitude enter: 30,32,32,30 <br>
+For longitude enter: -101,-101,-98,-98 <br> <br>
+To generate bounding box co-ordinates see <a href="https://boundingbox.klokantech.com/">here</a>.<br>
+</div>
 <p>
 {{form.lat_bounding.label}}<br>
 {{form.lat_bounding}}<br>
@@ -11,11 +22,15 @@
 <p>
 {{form.lon_bounding.label}}<br>
 {{form.lon_bounding}}<br>
-</p>    
+</p>
 <p>
 {{form.co2_depth.label}}<br>
 {{form.co2_depth}}<br>
 </p>
+<div>
+<b>Optional</b> The land surface temperature correction parameters enables the user to generate an additional profile that can evaluate variations in land surface temperature (e.g. due to climate change).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;For example specifying a land surface correction of 2 will add 2°C to the measured land surface temperature. The pre-existing geothermal gradient remains constant. For further details see here for <a href="/about#free_state_Horizontal_results">example results</a> and here for <a href="/about#horizontal_profile_method">further information</a>.
+</div>
 <p>
 {{form.climate.label}}<br>
 {{form.climate}}<br>
@@ -25,8 +40,9 @@
 {{form.land_correct}}<br>
 </p>
 <p>
-{{form.submit()}}
+<input type="submit" name="anything_submit" value="Submit" onclick="loading();">
 </p>
 </form>
+</div>
 
 {% endblock %}

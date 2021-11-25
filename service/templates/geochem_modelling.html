@@ -1,0 +1,42 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+
+<h3 id="geochemical_modelling">2.2.2 Geochemical modelling</h3> 
+<div>
+The three databases (PWGD, geothermal gradient and land surface temperature data) are coupled together such that each sample from the PWGD has a new estimate of an at-formation-depth temperature (and pressure). At present there is a single PHREEQC (Pitzer) modelling approach availible to an end user;<br>
+
+<ol>
+<li>Samples are driven from ~25°C (or the reported analysis temperature which is usually around 20-25°C) to the estimated at-formation-depth temperature/pressure.
+<li>The samples are equilibrated with the user specified primary mineral assemblage. This simulation occurs at formation-depth temperature/pressure conditions.
+<li>The samples are equilibrated with both the user specified primary and secondary mineral assemblages and also CO<sub>2</sub> is injected up to a pressure equal to the estimated at-formation-depth pressure. The simulation occurs at formation-depth temperature/pressure conditions.
+</ol>
+
+&nbsp;&nbsp;&nbsp;&nbsp;The geochemical model generates information about the potential CO<sub>2</sub> storage capacity in the water phase and the changes in formation mineralogy with respect to the primary and secondary mineral phases. These changes in formation mineralogy may reflect changes in the reservoir porosity (and by extension permeabilty which may impact reservoir performance). Notably this modelling package probably shouldn’t be used (at present) to evaluate changes in a cap rock mineralogy for the purposes of interpreting reservoir integrity as this is a more complex nuanced safety critical problem that is an area of active research.<br>
+
+The injection of CO<sub>2</sub> results in an increase in solution pH; <br>
+</div>
+CO<sub>2</sub> + H<sub>2</sub>O <-> HCO<sub>3</sub><sup>-</sup> + H<sup>+</sup> (eq.10) <br> <br>
+<div>
+This drives undersaturation of the primary mineralogy (assuming the primary mineralogy is more soluble at lower pH values) causing dissolution, particularly of carbonate phases such as calcite and dolomite. As the primary mineralogy dissolves this increases the ionic strength of the solution. An increase in the ionic strength can lead to an additional CO<sub>2</sub> sequestration process known as ionic trapping; the CO<sub>2</sub> solubility increases as ions such as Ca<sup>2+</sup> and Na<sup>2+</sup> form aqueous complexes with CO<sub>3</sub><sup>2-</sup> and HCO<sub>3</sub><sup>-</sup> ions. This affect though is relatively small in magnitude compared to the dependence of CO<sub>2</sub> solubility on temperature/pressure conditions. 
+</div>
+
+&nbsp;&nbsp;&nbsp;&nbsp;Using the modelling data we are able to extrapolate results to evaluate the sequestration potential in a theoretical cylinder of rock that surrounds the injection well. The end user is able to input dimensions (radius and height) and a representative (water-saturated) porosity. The potential volumes of CO<sub>2</sub> that can be sequestered if all the water in the cylinder was saturated with CO<sub>2</sub> is calculated. Volumes of CO<sub>2</sub> can then be converted to a monetary value of CO<sub>2</sub>; presently by default we use a recent price of CO<sub>2</sub> as recently traded (EU ETS - $70 per tonne). 
+
+The user is presented with different spatial options that are identical to the four found in the <a href="/free_state#horizontal_profile_method">previous section covering the horiontal method</a>. After inputting a spatial information the user is presented with the geochemical parameterization options.<br>
+&nbsp;&nbsp;&nbsp;&nbsp; The user has an option to input up to 4 primary minerals, and the molar amount of these minerals, that characterize the reservoir lithology. The user also has the option to add in secondary minerals that can form in the second stage of the simulation during the CO<sub>2</sub> injection. Lastly the user is able to input the dimensions of the cylinder of rock around the well and the water-saturated porosity. <br>
+
+The modelling produces a number of outputs;
+<ul>
+<li>The PHREEQC modelling input(.txt), output(.txt.out & .sel) and log files </li>
+<li>A CSV file (.csv) containing the data for each sample </li>
+<li>A shapefile (.shp) containing the data for each sample (and associated datafiles for the shapefile i.e. .cpg, .dbf, .shx). </li>
+<li>session_parameter.txt - This file contains the user specficied parameters and is useful for debugging purposes. </li>
+<li>Graph of the change in mineral volume and the value and volume of storable CO<sub>2</sub> </li>
+</ul>
+
+<center><a href="/free_state"> <<  Free state CO<sub>2</sub> and geothermal data</a> <b>|   <a href="/about"> CONTENTS </a>   |</b> <a href="/Results_heading"> Results >></a>  
+
+
+{% endblock %}

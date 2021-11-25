@@ -1,0 +1,64 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+
+<h4 id="free_state">2.2.1 Free state CO<sub>2</sub> density/state and geothermal data</h4>
+<div>
+This modelling option combines the geothermal gradient (<a href="/Heatflow_data">SMUH</a>) and land surface temperature data (<a href="/MODIS_data">MODIS</a>) to derive the estimate for the temperature at-formation-depth with results generated as either horizontal or vertical profiles. To estimate subsurface pressure conditions we assume hydrostatic pressures and utilize a representative water density.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;We calculate the formation water density (ρ<sub>w</sub>) using the median PWGD TDS (42,745 mg/l) and following equation (Bradley, 1987);<br>
+</div>
+ρ<sub>w</sub>=1+TDS×0.695×10<sup>-6</sup> (eq.8) <br><br>
+<div>
+finding  ρ<sub>w</sub> to be 1.029 g/cm<sup>3</sup>. The variation in hydrostatic pressure with depth equals;<br>
+</div>
+P=ρ<sub>w</sub>gz (eq.9) <br><br>
+where g represents the gravitational constant of 9.81m/s<sup>2</sup> and z is depth.<br>
+<div>
+&nbsp;&nbsp;&nbsp;&nbsp; Using the estimates for at-formation-depth pressure and temperature we calculate both the density of CO<sub>2</sub> and the phase state (e.g. liquid/gas/supercritical fluid) using the CO<sub>2</sub> equation of state developed by Span and Wagner (1996) as implemented in the CoolProp software package (Bell et al., 2013). Coolprop subdivides the supercritical region into a supercritical gas phase (P < P<sub>c</sub>; T > T<sub>c</sub>), supercritical liquid phase (P > P<sub>c</sub>; T < T<sub>c</sub>) and the supercritical phase (P > P<sub>c</sub>; T > T<sub>c</sub>) where P<sub>c</sub> and T<sub>c</sub> represent the critical pressure (P<sub>c</sub>=7.38MPa) and temperature (T<sub>c</sub>=31.0°C) of CO<sub>2</sub>. The supercritical region is divided into separate supercritical liquid and gas phase regions due to the wide variability in density and behaviour of supercritical fluids (see Bell et al., 2013). These calculations follow the method of Bachu (2003) who noted the dependency of CO<sub>2</sub> state and density on the surface temperature, geothermal gradient and depth/pressure.
+</div>
+
+After selecting the "Geothermal and Free state CO<sub>2</sub> data - Option 1" modelling process the end user is presented with an option to select either a horizontal or vertical profile.<br>
+
+<h5 id="horizontal_profile_method">2.2.1.1 Horizontal profile</h5>
+
+The horizontal modelling process takes an input of a target depth (e.g. 700m) and produces data for this depth for a given spatial area.<br>
+The user is presented with different spatial options. These cover 4 different scales;
+
+<ul>
+<li><b>All US</b> - Generates data for all 48 contiguous states</li>
+<li><b>US state</b> - Generates data for a single US state</li>
+<li><b>US county</b> - Generates data for a single or multiple county(ies) (that reside in a single state)</li>
+<li><b>Custom mapping</b> - Generates data for a custom area defined by a Lat/Lon bounding box</li>
+</ul>
+
+&nbsp;&nbsp;&nbsp;&nbsp;The user is then presented with the requirement to input relevant spatial parameters, a target depth of interest and optionally a land surface correction.
+
+The land surface temperature correction parameters enable the user to generate an additional profile that can evaluate variations in land surface temperature as measured by MODIS. The land surface temperature is an important parameter in determining the CO<sub>2</sub> density/state for a given depth (see Bachu, 2003). We suggest that as the land surface temperature rises in response to climate change this will have an impact on subsurface temperatures for a given depth. Of considerable uncertainty is how long changes in the surface temperature will take to have an impact on subsurface temperatures. Nevertheless this option could enable a safety margin/uncertainty to be relatively easily considered.<br>
+
+After entering parameters and running the simulation a zip file will be created and download will proceed immediately. The zip file contains the following files;
+<ul>
+<li>Georaster files (.tif) of the CO<sub>2</sub> state, density and temperatrure at the target depth. Also the geothermal gradient and the surface temperature are presented as a georaster. Simulation results with the land surface correction have 'climate' in the file name. These files can be opened by a GIS type program such as QGIS or ArcGIS.</li>
+<li>A shape file (.shp) containing the aforementioned data (and associated datafiles for the shapefile i.e. .cpg, .dbf, .shx). This file can be opened by a GIS type program such as QGIS or ArcGIS.</li>
+<li>A CSV file (.csv) containing the aforementioned data.</li>
+<li>session_parameter.txt - This file contains the user specficied parameters and is useful for debugging purposes</li>
+</ul>
+
+<h5 id="vertical_profile_method">2.2.1.2 Vertical profile</h5>
+<div>
+The vertical modelling process takes an input of a target depth range (e.g. 0m to 1750m) and produces data for this range for a given spatial area. The user is presented with different spatial options that are identical to the four found in the <a href="#horizontal_profile_method">previous section covering the horiontal method</a>. For the spatial area specified the median geothermal gradient and median surface temperature are used to generate the profile.
+
+&nbsp;&nbsp;&nbsp;&nbsp;The user is presented with the requirement to input relevant spatial parameters, a target depth range of interest (e.g. 0m to 1750m) and optionally a <a href="#horizontal_profile_method">land surface correction</a>.
+
+After entering parameters and running the simulation a zip file will be created and download will proceed immediately. The zip file contains the following files;
+</div>
+<ul>
+<li>A 2D vertical slice that contains temperature and CO<sub>2</sub> state/density profiles. </li>
+<li>A CSV file (.csv) containing the aforementioned data. </li>
+<li>session_parameter.txt - This file contains the user specficied parameters and is useful for debugging purposes. </li>
+</ul>
+
+<center><a href="/User_method"> <<  Methodology - User</a> <b>|   <a href="/about"> CONTENTS </a>   |</b> <a href="/geochemical_modelling"> Geochemical modelling >></a>  
+
+
+{% endblock %}

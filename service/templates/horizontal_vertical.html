@@ -2,8 +2,30 @@
 
 {% block content %}
 
-<h2> Horizontal/Vertical </h2>
+<h2> Choose horizontal or vertical CO<sub>2</sub> profile </h2>
 <form action="" method="post">
+<div>
+For a selected area of interest you can either generate;
+
+<ul>
+<li><b>Horizontal Profile</b> - The user assigns a target depth and area of interest. For the target depth using the geothermal model the program calculates the CO<sub>2</sub> state/density at a 0.01°x0.01° resolution (<a href="#horizontal_vertical">fig. A</a>). </li> 
+<li><b>Vertical Profile</b> - The user selects a range of depths of interest (e.g. 500m to 1500m). For the selected area the model calculates the subsurface temperature and CO<sub>2</sub> state/density throughout the depth range (<a href="#horizontal_vertical">fig. B</a>). </li> 
+</ul>
+See the <a href="/Results_heading#free_state_results">results</a> for further details. For both horizontal and vertical profiles an optional correction to the land surface temperature can be enabled. This allows a user to evaluate the impact of an increase in land surface temperatures associated with climate change (see <a href="/free_state#horizontal_profile_method">here</a> for further details).
+</div>
+
+<div class="row" id="horizontal_vertical">
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/co2_state_texas_no_correct.png" alt="co2_density_with_lee" style="width:100%">
+    <figcaption> Fig. A - <b>Horizontal profile</b> - CO<sub>2</sub> state at 700m depth for Texas. Lee county highlighted.
+    </figcaption>
+  </div>
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/D_T_plot.png" alt="2D vertical profile co2" style="width:100%">
+    <figcaption> Fig. B - <b>Vertical profile</b> - 2D vertical profile of median geothermal gradient and calculated CO<sub>2</sub> state/density for Lee county, Texas. 
+    </figcaption>
+  </div>
+</div>
 <p>
 {{form.co2_profile.label}}<br>
 {% for subfield in form.co2_profile %}

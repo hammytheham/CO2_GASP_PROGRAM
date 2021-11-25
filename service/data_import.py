@@ -9,23 +9,8 @@ import ModisData
 import boto3
 import sys
 
+from file_paths import s3_data,s3_geotherm_result, s3_MODIS_results, s3_geochem_result, output_data
 
-data='INPUT_DATA'
-#directory='/Users/hamish/github/co2_gasp'
-geotherm_result = 'INPUT_DATA/geothermal_result_files'
-MODIS_results = 'INPUT_DATA/MODIS_result_files'
-geochem_result = 'INPUT_DATA/geochemical_result_files'
-
-#this method is now mostly defunct....probably...can use S3 like local filesystem....mostly....
-def boto3_file_read(file):
-    print(file)
-    s3_client = boto3.client('s3')
-    response=s3_client.get_object(Bucket='co-2-gasp-bucket',Key=file)
-    status = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
-    if status == 200:
-        return response.get('Body')
-    else:
-       print ('Error retrieving file:',file)
 
 def boto3_download_results(file):
     url=boto3.client('s3').generate_presigned_url(
@@ -43,8 +28,8 @@ def read_in_data():
     Land surface temperatures read in seperate script
      """
     #rawusgs = pd.read_csv(boto3_file_read(data+'/USGS_Produced_Waters_v2'),sep='\t')
-    rawusgs = pd.read_csv('s3://co-2-gasp-bucket/'+data+'/USGS_Produced_Waters_v2',sep='\t')
-    geo=pd.read_csv('s3://co-2-gasp-bucket/'+data+'/core.template_heatflow_materialized.csv',sep=',')
+    rawusgs = pd.read_csv(s3_data+'/USGS_Produced_Waters_v2',sep='\t')
+    geo=pd.read_csv(s3_data+'/core.template_heatflow_materialized.csv',sep=',')
     return rawusgs, geo
 
 def run_geothermal_interpolate(geo):
@@ -53,7 +38,7 @@ def run_geothermal_interpolate(geo):
     if geo_interp_T_F == True:
         grad=geotherm_interpolate.main(geo)
     if geo_interp_T_F == False:
-        grad=pd.read_csv('s3://co-2-gasp-bucket/'+geotherm_result+'/geotherm_grad_grouped_1dp_no_filter.csv')
+        grad=pd.read_csv(s3_geotherm_result+'/geotherm_grad_grouped_1dp_no_filter.csv')
         grad=grad.drop([grad.columns[0],'index_right','geometry'],axis=1)
         grad=grad.round({'Lat':1,'Lon':1})  #This is just formatting the csv correctly, for some reason wasn't happy
         grad=grad.round({'Grad':1})
@@ -64,11 +49,11 @@ def run_geothermal_interpolate(geo):
 def MODIS_data_import():
     if MODIS_process_T_F == True:
         sur=ModisData.main()
-        print(sur.head(5))
+        #print(sur.head(5))
     if MODIS_process_T_F == False:
-        sur=pd.read_csv('s3://co-2-gasp-bucket/'+MODIS_results+'/merged_data_2')
+        sur=pd.read_csv(s3_MODIS_results+'/merged_data_2')
         sur=sur.drop_duplicates(subset=['Lat','Lon'],keep='first')
-        print(sur.head(5))
+        #print(sur.head(5))
     sur["TempSur_celsius"] = sur["TempSur"] - 273.15
     sur=sur.round({'TempSur_celsius':0})
     #print( 'lat n lon = ',sur[(sur.Lat == 41.1) & (sur.Lon == -79.7)])  # this one is fine
@@ -78,8 +63,11 @@ def medusgs_data_import(rawusgs,grad,sur):
     if Merge_usgs_grad_T_F == True:
         medusgs=data_import_2.main(rawusgs,grad,sur)
     if Merge_usgs_grad_T_F == False:
-        medusgs=pd.read_csv('s3://co-2-gasp-bucket/'+geochem_result+'/merged_data')
-        print(medusgs.head(5))
+        medusgs=pd.read_csv(s3_geochem_result+'/merged_data_all_samples')
+        #print(len(medusgs))
+        mgca_count=medusgs.groupby(['Lat', 'Lon']).size().reset_index(name='counts')
+        mgca_count.to_csv(output_data+'/mgca_count_all_samples.txt')
+        #print(medusgs.head(5))
     return medusgs
 
 

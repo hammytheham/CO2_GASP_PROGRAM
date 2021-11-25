@@ -2,8 +2,20 @@
 
 {% block content %}
 
-<h2> Vertical Geothermal / CO2 profiles </h2>
+<h2> Vertical profile spatial options </h2>
 <form action="" method="post">
+<p>
+The different spatial filters are;<br>
+</p>
+<ul>
+<li><b>All US</b> - All 48 contiguous states</li>
+<li><b>US state</b> - Choose a state</li>
+<li><b>US county</b> - Choose a county(ies)</li>
+<li><b>Custom mapping</b> - Enter Lat/Lon bounding box for custom area</li>
+</ul>
+<p>
+Please choose a spatial filter;
+</p>
 <p>
 {{form.mapping_select.label}}<br>
 {% for subfield in form.mapping_select %}

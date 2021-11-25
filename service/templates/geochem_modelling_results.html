@@ -1,0 +1,34 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+<h3 id="geochemical_modelling_results">3.2 Geochemical modelling</h3>
+<div>
+Typically as the temperature of the brine increases the volume of CO<sub>2</sub> that can dissolve decreases. This is balanced by the pressure effect which results in greater volumes of CO<sub>2</sub> dissolving at higher pressures. There are significant variations in the CO<sub>2</sub> solubility for brines at similar depths that reflect both spatial variations in geothermal gradients and chemical differences between brines.<br>
+
+For the geochemical modelling we present the predicted change in mineral volume (<a href="#geochem_results_figs">fig. 19</a>), volume (<a href="#geochem_results_figs">fig. 20</a>) and value (<a href="#geochem_results_figs">fig. 21</a>) of the storable CO<sub>2</sub> for all the samples from Texas. We used a reservoir lithology comprised of calcite (1 mole), dolomite (1 mole) and halite (1 mole). The dimensions of the theoretical reservoir of influence were 200m radius * 100m height * 0.15 saturated porosity.
+</div>
+
+<div class="row" id="geochem_results_figs">
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/change_vol_pc.png" alt="change_volume" style="width:100%">
+    <figcaption>Fig. 19 - Change in the mineral volume relative to the starting mineral volume.
+    </figcaption>
+  </div>
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/volume_of_storable_co2.png" alt="co2_density_texas_plus_2" style="width:100%">
+    <figcaption> Fig. 20 - Volume (million tonnes) of the storable CO<sub>2</sub> in the theoretical water saturated (15%) cylinder (200m radius x 100m height).
+    </figcaption>
+  </div>
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/value_of_storable_co2.png" alt="value_co2" style="width:100%">
+    <figcaption> Fig. 21 - Value (million dollars based on $70 per tonne of CO<sub>2</sub>) of the storable CO<sub>2</sub> in the theoretical water saturated (15%) cylinder (200m radius x 100m height).
+    </figcaption>
+  </div>
+</div>
+
+
+<center><a href="/free_state"> <<  Results </a> <b>|   <a href="/about"> CONTENTS </a>   |</b> <a href="/reference_heading"> References >></a>  
+
+
+{% endblock %}

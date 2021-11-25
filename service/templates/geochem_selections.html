@@ -2,8 +2,16 @@
 
 {% block content %}
 
+<div id="loading">
+    <div><br><br><br> Your simulation is running and the download will commence automatically. This can take up to several minutes. Once it has downloaded click <a href="/">here</a> to return to the home screen.</div>
+</div>
+<div id="content">
 <h2> Geochemical modelling </h2>
 <form action="" method="post">
+<div>
+Choose up to 4 minerals that characterize the mineral assemblage and the initial number of moles of each mineral in the assemblage. Note the thermodynamics of all minerals are the same as those found in pitzer.dat aside from dolomite which uses a newly developed solubility constant (see <a href="/Robertson_et_al#groundtruth_robertson_2021">here</a>).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;To generate mole values from a lithology we have developed a <a href="/molar_volume_conversion">calculator</a>. 
+</div>
 <p>
 {{form.mineral_select_1.label}}<br>
 {{form.mineral_select_1}}<br>
@@ -37,63 +45,58 @@
 {{form.moles_4}}<br>
 </p>
 <p>
-{{form.mineral_select_5.label}}<br>
-{{form.mineral_select_5}}<br>
+<b>Optional</b> - Choose up to 4 minerals that characterize the potential secondary minerals (e.g. natron) that may form in response to CO<sub>2</sub> injection (zero initial moles is assumed).
 </p>
 <p>
-{{form.moles_5.label}}<br>
-{{form.moles_5}}<br>
+{{form.sec_mineral_select_1.label}}<br>
+{{form.sec_mineral_select_1}}<br>
 </p>
 <p>
-{{form.mineral_select_6.label}}<br>
-{{form.mineral_select_6}}<br>
+{{form.sec_moles_1.label}}<br>
+{{form.sec_moles_1}}<br>
 </p>
 <p>
-{{form.moles_6.label}}<br>
-{{form.moles_6}}<br>
+{{form.sec_mineral_select_2.label}}<br>
+{{form.sec_mineral_select_2}}<br>
 </p>
 <p>
-{{form.mineral_select_7.label}}<br>
-{{form.mineral_select_7}}<br>
+{{form.sec_moles_2.label}}<br>
+{{form.sec_moles_2}}<br>
 </p>
 <p>
-{{form.moles_7.label}}<br>
-{{form.moles_7}}<br>
+{{form.sec_mineral_select_3.label}}<br>
+{{form.sec_mineral_select_3}}<br>
 </p>
 <p>
-{{form.mineral_select_8.label}}<br>
-{{form.mineral_select_8}}<br>
+{{form.sec_moles_3.label}}<br>
+{{form.sec_moles_3}}<br>
 </p>
 <p>
-{{form.moles_8.label}}<br>
-{{form.moles_8}}<br>
+{{form.sec_mineral_select_4.label}}<br>
+{{form.sec_mineral_select_4}}<br>
 </p>
 <p>
-{{form.mineral_select_9.label}}<br>
-{{form.mineral_select_9}}<br>
+{{form.sec_moles_4.label}}<br>
+{{form.sec_moles_4}}<br>
 </p>
 <p>
-{{form.moles_9.label}}<br>
-{{form.moles_9}}<br>
+<b>Optional</b> - For a hypothetical cynlinder representing the area of influence around the well input the radius, height and porosity (as a decimal fraction i.e. for 20% porosity input 0.2) of the rock. The geochemical modelling results are extrapolated to this volume.
 </p>
 <p>
-{{form.mineral_select_10.label}}<br>
-{{form.mineral_select_10}}<br>
+{{form.radius.label}}<br>
+{{form.radius}}<br>
 </p>
 <p>
-{{form.moles_10.label}}<br>
-{{form.moles_10}}<br>
+{{form.height.label}}<br>
+{{form.height}}<br>
 </p>
 <p>
-{{form.mineral_select_11.label}}<br>
-{{form.mineral_select_11}}<br>
+{{form.porosity.label}}<br>
+{{form.porosity}}<br>
 </p>
 <p>
-{{form.moles_11.label}}<br>
-{{form.moles_11}}<br>
-</p>
-<p>
-{{form.submit()}}
+<input type="submit" name="anything_submit" value="Submit" onclick="loading();">
 </p>
 </form>
+</div>
 {% endblock %}

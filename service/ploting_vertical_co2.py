@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-co2_results='/home/ec2-user/environment/CO2_GASP_PROGRAM/temp/OUTPUT_DATA/co2_results'
+from file_paths import co2_results
 
 
 def plot_3_columns(D_T,user_job,climate,land_sur_correct):

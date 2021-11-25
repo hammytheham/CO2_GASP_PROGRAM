@@ -1,0 +1,31 @@
+{% extends "base.html"%}
+
+{% block content %}
+<div id="loading">
+    <div><br><br><br> Your simulation is running and the download will commence automatically. This can take up to several minutes. Once it has downloaded click <a href="/">here</a> to return to the home screen.</div>
+</div>
+<div id="content">
+<h2> Horizontal Geothermal / CO<sub>2</sub> profile - Custom </h2>
+<form action="" method="post">
+<p>
+This filter performs geochemical modelling for fluids located in a custom user specified area (bounding box). <br>
+The minimum number of vertices for the bounding box is 4; i.e. a rectangular bounding box (additional vertices can be specified). For a rectangular box seperately enter the 4 latitude and 4 longitude coordinates seperated by a comma. For example for a bounding box with vertices of (30, -101), (32,-101), (32,-98) and (30,-98); <br>
+For latitude enter: 30,32,32,30 <br>
+For longitude enter: -101,-101,-98,-98 <br>
+To generate bounding box co-ordinates see <a href="https://boundingbox.klokantech.com/">here</a>.<br>
+</p> 
+<p>
+{{form.lat_bounding.label}}<br>
+{{form.lat_bounding}}<br>
+</p>    
+<p>
+{{form.lon_bounding.label}}<br>
+{{form.lon_bounding}}<br>
+</p>    
+<p>
+<input type="submit" name="anything_submit" value="Submit" onclick="loading();">
+</p>
+</form>
+</div>
+
+{% endblock %}

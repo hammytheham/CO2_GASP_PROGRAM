@@ -1,0 +1,68 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}    
+    
+</style>
+
+<h4 id="USGS_Produced_Water_Database"> 2.1.2 USGS Produced water geochemical database (Blondes et al., 2016)</h4>
+<div>
+The USGS produced water geochemical database comprises 165,960 water chemistry samples from across the United States. The produced water samples are typically concentrated around areas of historically high levels of oil production such as Texas (see <a href="#pwgd_distribution">fig. 2</a>).
+</div>
+<div class="row" id="pwgd_distribution">
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/PWGD_SAMPLES_COUNTY.png" alt="pwgd samples no lith" style="width:100%">
+    <figcaption>Fig.2a - Number of PWGD samples per US county - dataset 1 (no lithology filter)  (see <a href="#table_1_img">table 1</a>). Total number of PWGD samples is 48,008. </figcaption>
+  </div>
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/pwgd_sample_data_small.png" alt="pwgd samples with lith" style="width:100%">
+    <figcaption> Fig.2b - Number of PWGD samples per US county - dataset 2 (with lithology filter) (see <a href="#table_1_img">table 1</a>). Total number of PWGD samples is 11,480.  </figcaption>
+  </div>
+</div>
+
+<div>
+The rocks in sedimentary basins are sedimentary so are either clastic (e.g. sandstone) or carbonate (e.g. limestone). These rocks are typically somewhat porous and in the pore spaces a wide variety of fluids can be hosted. Most commonly its water, but of economic significance are the world's oil and gas deposits. In comaprison to seawater this water is often as salty (or more so) but the composition is also highly variable. When oil reservoirs are drilled a significant volume of this water (termed produced water) often accompanies the oil to the surface where it is separated and typically reinjected underground to a) maintain reservoir pressure and b) it is typically not potable and few practical uses.<br>
+</div>
+<blockquote style="border: 2px solid #666; padding: 10px; background-color: #ccc;"> 
+<h4 id="Produced_water">What is produced water?</h4>
+ <div>Oil is typically found in sedimentary basins which encompass all the rocks in areas up to 1000´s of km² and up to ~10km deep; sedimentary basins form through the infilling of depressions in the land surface with sediments (<a href="#seedimentary_basin">fig.3</a>).
+ </div>
+<figure id="sedimentary_basin">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/sedimentary-basin.png" alt="sedimentary basin" style="width:80%">
+  <figcaption>Fig.3- Generation of clastic sedimentary formations (sandstone) in a sedimentary basin. Note carbonate formations form through the precipitation of calcite through abiotic and biotic (e.g. coral reefs) mechanisms. </figcaption>
+</figure>
+<div>
+The USGS Produced Water Database (Blondes et al., 2016) has records from 56 AAPG (American Association of Petroleum Geologists) geological provinces, which are mostly named the areas of the US containing well known sedimentary basins such as the Permian basin (see <a href="https://ngmdb.usgs.gov/Geolex/stratres/provinces">AAPG provinces</a> and Meyer et al., 1991).
+</div>
+</blockquote>
+<div>
+&nbsp;&nbsp;&nbsp;&nbsp;Alongside location data, for each sample the USGS produced water database contains detailed information about the chemistry, the depth from which the sample was taken and occasionally information of the rock at the sampled depth (e.g. whether the host lithology is a limestone or a sandstone). For the <a href="/geochemical_modelling_results">geochemical modelling</a> which seeks to evaluate reactions occuring in the subsurface accurate infomation about the temperature at the depth from which the sample was taken is needed. This information is notably lacking from the USGS produced water database and is the reason for the use of the land surface temperature and geothermal gradient data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The USGS produced water database has been filtered for sample quality using a set of criteria (see <a href="#table_1_img">table 1</a>) adapted from Hitchon and Brulotte (1994) and Blondes et al. (2016). There are two versions of this filtering process with the difference being the use of a lithology filter that rejects samples that does not contain a description of the host lithology of the sample. The larger dataset (no lithology filter) contains 48,008 samples whilst the smaller dataset (with lithology filter) contains 11,480 samples.<b>At present due to limited funds for this project only the smaller database is in use.</b>   
+</div>
+
+<figure id="table_1_img">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/rejection_inclusion_criteria.png" alt="rejection_criteria" style="width:90%">
+<figcaption>Table.1 - Geochemical and geospatial/other rejection criteria used to filter the PWGD and the rejection criteria used by Hitchon and Brulotte (1994) and Blondes et al. (2016). Of the entire database (n=165,960) 93% of all samples failed to meet all the criteria specified in this study, leaving a final population of n=11,840. Excluding the criteria that a sample must have a lithology description (highlighted in red) results in 71% of samples failing to meet remaining criteria, leaving a final population of n=48,008. N/A is not applicable; this criteria is not used to discriminate against a sample’s inclusion in the dataset. 
+ </figcaption>
+</figure>
+
+<center><a href="/Background_methodology_heading"> << Methodology - Background</a> <b>|   <a href="/about"> CONTENTS </a>   |</b> <a href="/Heatflow_data"> Geothermal gradient data >></a>  
+
+{% endblock %}

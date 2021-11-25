@@ -1,0 +1,75 @@
+{'d_Akermanite': 2156
+,'d_Anhydrite': 136.1
+,'d_Anthophyllite': 780.8
+,'d_Antigorite':300.8
+,'d_Aragonite':100.1
+,'d_Arcanite': 174.3
+,'d_Artinite': 196.7
+,'d_Barite': 233.4
+,'d_Bischofite': 203.3
+,'d_Bloedite': 334.5
+,'d_Brucite': 58.32
+,'d_Burkeite': 390.1
+,'d_Calcite': 100.9
+,'d_Carnallite': 277.9
+,'d_Celestite': 183.7 
+,'d_Chalcedony': 60  
+,'d_Chrysotile': 277.11 
+,'d_Diopside': 216.6
+,'d_Dolomite': 184.4
+,'d_Enstatite': 200.8
+,'d_Epsomite': 246
+,'d_Forsterite': 140.7
+,'d_Gaylussite': 296.2
+,'d_Glaserite': 320.3
+,'d_Glauberite': 278.2
+,'d_Goergeyite': 873
+,'d_Gypsum':172.2 
+,'d_Halite': 58.44
+,'d_Hexahydrite': 228.5
+,'d_Huntite': 353
+,'d_Kainite': 249
+,'d_Kalicinite': 100.1
+,'d_Kieserite':138.4 
+,'d_Labile_S':None 
+,'d_Leonhardite': None
+,'d_Leonite': 366.7
+,'d_Magnesite': 84.3
+,'d_MgCl2_2H2O': None
+,'d_MgCl2_4H2O': None
+,'d_Mirabilite': 322.2
+,'d_Misenite': 991.3
+,'d_Nahcolite':84.01 
+,'d_Natron': 286
+,'d_Nesquehonite': 138.4
+,'d_Pentahydrite':210.5 
+,'d_Pirssonite': 242.1
+,'d_Polyhalite': 602.9
+,'d_Portlandite': 74.09
+,'d_Quartz':60.083 
+,'d_Schoenite': 402.7
+,'d_Sepiolite(d)': 613.8
+,'d_Sepiolite': 613.8
+,'d_SiO2(a)':  60 
+,'d_Sylvite': 74.55
+,'d_Syngenite': 328.4
+,'d_Talc': 379.26
+,'d_Thenardite': 142
+,'d_Trona': None
+,'d_Borax':381.36 
+,'d_Boric_acid,s': None
+,'d_KB5O8:4H2O': None
+,'d_K2B4O7:4H2O': None
+,'d_NaBO2:4H2O': None
+,'d_NaB5O8:5H2O': None
+,'d_Teepleite': 160.3
+,'CO2':44.01 }
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,109 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+
+<h2 id="Results_heading">3 Results</h2>
+<div>
+In this section we present the example modelling results for both the free state CO<sub>2</sub> and geochemical modelling paths.
+</div>
+<h3 id="free_state_results">3.1 Free state CO<sub>2</sub> and geothermal data results </h3>
+<div>
+We present examples for both the horizontal and vertical modelling paths.
+</div>
+<h4 id="free_state_Horizontal_results">3.1.1 Horizontal results</h4>
+<div>
+Below is a representation of the CO<sub>2</sub> density at 700m depth for Texas (<a href="#Texas_700m_density">fig. 13a & 13b</a>). Note how the addition of 2°C to the land surface temperature results in significant changes to the calculated density at the target depth.
+</div>
+
+<div class="row" id="Texas_700m_density">
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/co2_density_with_lee_png.png" alt="co2_density_with_lee" style="width:100%">
+    <figcaption>Fig. 13a - CO<sub>2</sub> density at 700m depth for Texas using the original MODIS value for land surface temperature. The location of Lee county is highlighted.
+    </figcaption>
+  </div>
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/co2_density_texas_plus_2_png.png" alt="co2_density_texas_plus_2" style="width:100%">
+    <figcaption> Fig. 13b - CO<sub>2</sub> density at 700m depth for Texas with a +2°C adition to the MODIS land surface temperature. The location of Lee county is highlighted
+    </figcaption>
+  </div>
+</div>
+<br>
+<div>
+Also presented is the representation of CO<sub>2</sub> state at 700m depth for Texas (<a href="#Texas_700m_state">fig. 14a & 14b</a>).
+</div>
+
+<div class="row" id="Texas_700m_state">
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/co2_state_texas_no_correct.png" alt="co2_density_with_lee" style="width:100%">
+    <figcaption>Fig. 14a - CO<sub>2</sub> state at 700m depth for Texas using the original MODIS value for land surface temperature. The location of Lee county is highlighted.
+    </figcaption>
+  </div>
+  <div class="column">
+    <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/co2_state_texas_climate.png" alt="co2_density_texas_plus_2" style="width:100%">
+    <figcaption> Fig. 14b - CO<sub>2</sub> state at 700m depth for Texas with a +2°C adition to the MODIS land surface temperature. The location of Lee county is highlighted
+    </figcaption>
+  </div>
+</div>
+<br>
+<div>
+Also presented is the calculated temperature at 700m depth for Texas (<a href="#Texas_700m_temperature">fig. 15a & 15b</a>).
+</div>
+
+<div class="row" id="Texas_700m_temperature">
+  <div class="column">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/temperature_texas_700.png" alt="co2_temperature_with_lee" style="width:100%">
+  <figcaption>Fig. 15a - Temperature at 700m depth for Texas using the original MODIS value for land surface temperature. The location of Lee county is highlighted.
+  </figcaption>
+  </div>
+  <div class="column">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/temperature_texas_700_plus_2.png" alt="co2_temperature_with_lee_plus_2" style="width:100%">
+  <figcaption>Fig. 15b - Temperature at 700m depth for Texas with a +2°C adition to the MODIS land surface temperature. The location of Lee county is highlighted.
+  </figcaption>
+  </div>
+</div>
+<br>
+
+The following two figures represent the underlying data used to calculate the CO<sub>2</sub> density, state and temperature at formation depth. Specifically the MODIS land surface temperature data (<a href="#Texas_geothermal_grad_MODIS_temp">fig. 16</a>) and SMUH geothermal gradient data (<a href="#Texas_geothermal_grad_MODIS_temp">fig. 17</a>) are included.
+
+
+<div class="row" id="Texas_geothermal_grad_MODIS_temp">
+  <div class="column">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/temperature_surface_modis.png" alt="MODIS_data" style="width:100%">
+  <figcaption>Fig. 16 - Landsurface temperatures for Texas derived from MODIS data. The location of Lee county is highlighted.
+  </figcaption>
+  </div>
+  <div class="column">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/geotherm_grad_texas.png" alt="Geotherm_grad" style="width:100%">
+  <figcaption>Fig. 17 - Interpolated geothermal gradients for Texas derived from SMUH data. The location of Lee county is highlighted.
+  </figcaption>
+  </div>
+</div>
+<br>
+
+
+We have previously generated files for the entire US at various depths that can be downloaded and used. Below is a PDF of results of calculated CO<sub>2</sub> density/state for the whole of the US for various target depths. Higher resolution versions are availible for download here (to add). 
+
+<iframe
+    src="https://drive.google.com/viewerng/viewer?embedded=true&url=https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/ALL_US_CO2_DENSITY_STATE/co2_state_density_low_res.pdf#toolbar=0&scrollbar=0"
+    frameBorder="0"
+    scrolling="auto"
+    height="100%"
+    width="100%"
+></iframe>
+
+<h4 id="free_state_vertical_results">3.1.2 Vertical results</h4>
+<div>
+For Lee county, Texas (see <a href="#Texas_700m_density">figs. 13 - 17</a> for location) between 0m to 2500m we present the output 2D vertical profiles of the median geothermal gradient and calculated CO<sub>2</sub> state/density (fig. <a href="#2D_vert_profile_co2">18</a>).
+</div>
+
+<figure id="2D_vert_profile_co2">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/D_T_plot.png" alt="2D vertical profile co2" style="width:50%">
+  <figcaption>Fig.18 - 2D vertical profile of median geothermal gradient and calculated CO<sub>2</sub> state/density. The shading indicates the range of geothermal gradients present in the area.
+  </figcaption>
+</figure>
+
+<center><a href="/geochemical_modelling"> <<  Geochemical modelling </a> <b>|   <a href="/about"> CONTENTS </a>   |</b> <a href="/geochemical_modelling_results"> Geochemical modelling results >></a>  
+
+
+{% endblock %}

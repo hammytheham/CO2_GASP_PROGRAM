@@ -1,0 +1,19 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+<h2> Horizontal Geothermal / CO2 profile - State level </h2>
+<form action="" method="post">
+<p>
+This filter performs geochemical modelling for fluids located in a state. <br>
+Select a state:
+<p>
+{{form.US_state_select.label}}<br>
+{{form.US_state_select}}<br>
+</p>
+<p>
+{{form.submit()}}
+</p>
+</form>
+
+{% endblock %}

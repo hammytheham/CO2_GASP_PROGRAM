@@ -1,0 +1,17 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+<h4 id="MODIS_data">2.1.4 MODIS satellite land surface temperature data (Bechtel, 2015)</h4>
+<div>
+In order to accurately determine the temperature at-formation-depth the land surface temperature is of significant importance. We use the mean annual land surface temperature as observed by the MODIS satellite (Bechtel, 2015) to constrain this value. This data has been lightly reprocessed to a 0.1x0.1° Lat/Lon resolution to be used in this study (<a href="#modis_land_sur">fig. 7</a>).<br>
+</div>
+<figure id="modis_land_sur">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/MODIS_INTERP.png" alt="MODIS satellite data" style="width:80%">
+  <figcaption>Fig.7 - Mean annual land surface temperature (MAST) (°C) for North America between 2003-2014 (Bechtel, 2015) at 0.1x0.1° Lat/Lon resolution. </figcaption>
+</figure>
+
+<center><a href="/Heatflow_data"> << Geothermal gradient data</a> <b>|   <a href="/about"> CONTENTS </a>   |</b> <a href="/Robertson_et_al"> Robertson et al. (2021) >></a>  
+
+
+{% endblock %}

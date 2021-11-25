@@ -11,13 +11,9 @@ from geopandas.tools import sjoin
 import subprocess
 import matplotlib.pyplot as plt
 import ploting_vertical_co2
-from data_import import boto3_file_read
+#from data_import import boto3_file_read
 
-
-directory='/home/ec2-user/environment/CO2_GASP_PROGRAM/service/'
-us_land='/home/ec2-user/environment/INPUT_DATA/SHAPE_DATA/USA_adm'
-co2_results='/home/ec2-user/environment/CO2_GASP_PROGRAM/temp/OUTPUT_DATA/co2_results'
-output_data='/home/ec2-user/environment/CO2_GASP_PROGRAM/temp/OUTPUT_DATA'
+from file_paths import directory, us_land, co2_results, output_data
 
 
 #could probably save merge data and grad_sur_calcs as pre-processed data
@@ -90,9 +86,9 @@ def read_shape_all_US():
 	xmin, ymin, xmax, ymax = spoly.total_bounds
 	#sub_explo=country_boundary_us.cx[xmin:xmax,ymin:ymax]
 	sub_explo=exploded.cx[xmin:xmax,ymin:ymax]
-	print(sub_explo.head())
+	#print(sub_explo.head())
 	sub_explo=sub_explo.reset_index().drop(['ID_0' , 'ISO'   , 'NAME_0' ,'OBJECTID_1', 'ISO3', 'NAME_ENGLI', 'NAME_ISO', 'NAME_FAO', 'NAME_LOCAL', 'NAME_OBSOL', 'NAME_VARIA', 'NAME_NONLA', 'NAME_FRENC', 'NAME_SPANI', 'NAME_RUSSI', 'NAME_ARABI', 'NAME_CHINE', 'WASPARTOF', 'CONTAINS', 'SOVEREIGN', 'ISO2', 'WWW', 'FIPS', 'ISON', 'VALIDFR', 'VALIDTO', 'POP2000', 'SQKM', 'POPSQKM', 'UNREGION1', 'UNREGION2', 'DEVELOPING', 'CIS', 'Transition', 'OECD', 'WBREGION', 'WBINCOME', 'WBDEBT', 'WBOTHER', 'CEEAC', 'CEMAC', 'CEPLG', 'COMESA', 'EAC', 'ECOWAS', 'IGAD', 'IOC', 'MRU', 'SACU', 'UEMOA', 'UMA', 'PALOP', 'PARTA', 'CACM', 'EurAsEC', 'Agadir', 'SAARC', 'ASEAN', 'NAFTA', 'GCC', 'CSN', 'CARICOM', 'EU', 'CAN', 'ACP', 'Landlocked', 'AOSIS', 'SIDS', 'Islands', 'LDC'],axis=1)
-	print('sub explo read')
+	#print('sub explo read')
 	return sub_explo
 
 def intersecting_points_all_US(grad_sur,sub_explo,co2_depth,user_job):
@@ -105,19 +101,20 @@ def intersecting_points_all_US(grad_sur,sub_explo,co2_depth,user_job):
 	grouped=grouped.apply(lambda x: x.reset_index(drop = True))
 	grouped=grouped.dropna(axis=0)
 	grouped=grouped.set_index(grouped.columns[0]).reset_index()
-	print(grouped.head(10))
+	#print(grouped.head(10))
 	grouped.to_file(driver='ESRI Shapefile',filename= co2_results+'/temperature_depth_%i_all_US.shp'%(co2_depth))
-	pipe = subprocess.run([directory+'/gdal_command_1.sh',str(co2_depth)])
-	print('gdal command run')
-	print(grouped.head())
+	pipe = subprocess.run([directory+'gdal_command_1.sh',str(co2_depth)])
+	#print('gdal command run')
+	#print(grouped.head())
 	grouped.to_csv(co2_results+'/'+user_job+'/temperature_depth_%i_all_US.csv'%(co2_depth))
 	return grouped
 
 
 def read_shape_state(co2_US_state):
+	#print(co2_US_state)
 	crs = {'init': 'epsg:4269'} #http://www.spatialreference.org/ref/epsg/2263/
 	state_boundary_us = gpd.read_file(us_land+'/USA_adm1.shp',crs=crs)
-	print(state_boundary_us)
+	#print(state_boundary_us)
 	exploded=state_boundary_us.loc[state_boundary_us['NAME_1']==co2_US_state].explode()
 	box=[(-128.600464,24.374619),(-128.600464,50.406767),(-60.748901,50.406767),(-60.748901,24.374619)]
 	poly = Polygon(box)
@@ -125,9 +122,9 @@ def read_shape_state(co2_US_state):
 	xmin, ymin, xmax, ymax = spoly.total_bounds
 	#sub_explo=country_boundary_us.cx[xmin:xmax,ymin:ymax]
 	sub_explo=exploded.cx[xmin:xmax,ymin:ymax]
-	print(sub_explo.head())
+	#print(sub_explo.head())
 	sub_explo=sub_explo.reset_index().drop(['ID_0' , 'ISO'   , 'NAME_0' , 'ID_1' ,'NAME_1' ,'TYPE_1', 'ENGTYPE_1' ,'NL_NAME_1', 'VARNAME_1' ],axis=1)
-	print('sub explo read')
+	#print('sub explo read')
 	return sub_explo
 
 #def temp_at_form(grad_sur):
@@ -144,11 +141,11 @@ def intersecting_points_state(grad_sur,sub_explo,co2_US_state,co2_depth,user_job
 	grouped=grouped.apply(lambda x: x.reset_index(drop = True))
 	grouped=grouped.dropna(axis=0)
 	grouped=grouped.set_index(grouped.columns[0]).reset_index()
-	print(grouped.head(10))
+	#print(grouped.head(10))
 	grouped.to_file(driver='ESRI Shapefile', filename=co2_results+'/'+user_job+'/temperature_depth_%i_state.shp'%(co2_depth))
-	pipe = subprocess.run([directory+'/gdal_command_2.sh',str(co2_depth),str(co2_results+'/'+user_job)])
-	print('gdal command run')
-	print(grouped.head())
+	pipe = subprocess.run([directory+'gdal_command_2.sh',str(co2_depth),str(co2_results+'/'+user_job)])
+	#print('gdal command run')
+	#print(grouped.head())
 	grouped.to_csv(co2_results+'/'+user_job+'/temperature_depth_%i_state.csv'%(co2_depth))
 	return grouped
 
@@ -164,9 +161,9 @@ def read_shape_county(co2_US_county,co2_US_state):
 	xmin, ymin, xmax, ymax = spoly.total_bounds
 	#sub_explo=country_boundary_us.cx[xmin:xmax,ymin:ymax]
 	sub_explo=exploded.cx[xmin:xmax,ymin:ymax]
-	print(sub_explo.head())
+	#print(sub_explo.head())
 	sub_explo=sub_explo.reset_index().drop(['ID_0' , 'ISO'   , 'NAME_0' , 'ID_1' ,'NAME_1' ,'ID_2', 'NAME_2',  'TYPE_2', 'ENGTYPE_2', 'NL_NAME_2', 'VARNAME_2' ],axis=1)
-	print('sub explo read')
+	#print('sub explo read')
 	return sub_explo
 
 
@@ -180,11 +177,11 @@ def intersecting_points_county(grad_sur,sub_explo,co2_US_county,co2_depth,user_j
 	grouped=grouped.apply(lambda x: x.reset_index(drop = True))
 	grouped=grouped.dropna(axis=0)
 	grouped=grouped.set_index(grouped.columns[0]).reset_index()
-	print(grouped.head(10))
+	#print(grouped.head(10))
 	grouped.to_file(driver='ESRI Shapefile', filename=co2_results+'/'+user_job+'/temperature_depth_%i_county.shp'%(co2_depth))
-	pipe = subprocess.run([directory+'/gdal_command_3.sh',str(co2_depth),str(co2_results+'/'+user_job)])
-	print('gdal command run')
-	print(grouped.head())
+	pipe = subprocess.run([directory+'gdal_command_3.sh',str(co2_depth),str(co2_results+'/'+user_job)])
+	#print('gdal command run')
+	#print(grouped.head())
 	grouped.to_csv(co2_results+'/'+user_job+'/temperature_depth_%i_county.csv'%(co2_depth))
 	return grouped
 
@@ -199,11 +196,11 @@ def intersecting_points_custom(grad_sur,spoly,co2_depth,user_job):
 	grouped=grouped.apply(lambda x: x.reset_index(drop = True))
 	grouped=grouped.dropna(axis=0)
 	grouped=grouped.set_index(grouped.columns[0]).reset_index()
-	print(grouped.head(10))
+	#print(grouped.head(10))
 	grouped.to_file(driver='ESRI Shapefile', filename=co2_results+'/'+user_job+'/temperature_depth_%i_custom.shp'%(co2_depth)) #'s3://co-2-gasp-bucket/'+co2_results+'/temperature_depth_%i_custom.shp'%(co2_depth))
 	pipe = subprocess.run([directory+'gdal_command_4.sh',str(co2_depth),str(co2_results+'/'+user_job)])
-	print('gdal command run')
-	print(grouped.head())
+	#print('gdal command run')
+	#print(grouped.head())
 	grouped.to_csv(co2_results+'/'+user_job+'/temperature_depth_%i_custom.csv'%(co2_depth))
 	return grouped
 
@@ -227,7 +224,7 @@ def intersecting_points_state_vertical(grad_sur,sub_explo,min_vert_depth,max_ver
 	grouped=grouped.apply(lambda x: x.reset_index(drop = True))
 	grouped=grouped.dropna(axis=0)
 	grouped=grouped.set_index(grouped.columns[0]).reset_index()
-	print(grouped.head(15))
+	#print(grouped.head(15))
 	lw=int(min_vert_depth)
 	up=int(max_vert_depth)
 	pw=(1+(42745*0.695e-6))*1000 #kg/m3
@@ -239,11 +236,11 @@ def intersecting_points_state_vertical(grad_sur,sub_explo,min_vert_depth,max_ver
 	'temp_max':(np.arange(lw,up,1)*(grouped.Grad.max()/1000))+grouped.TempSur_c.median(),
 	'Grad':grouped.Grad.median(),
 	'Sur':grouped.TempSur_c.median()})
-	print('D_T')
-	print(D_T.head(15))
+	#print('D_T')
+	#print(D_T.head(15))
 
 	
-	print(D_T.apply(f1,args=('temp_cel','pressure'), axis=1))
+	#print(D_T.apply(f1,args=('temp_cel','pressure'), axis=1))
 	D_T['co2_den']=D_T.apply(f1,args=('temp_cel','pressure'), axis=1)
 	D_T['co2_state']=D_T.apply(f2,args=('temp_cel','pressure'), axis=1)
 	D_T['co2_den_climate']=D_T.apply(f1,args=('temp_cel_climate','pressure'), axis=1)
@@ -254,7 +251,7 @@ def intersecting_points_state_vertical(grad_sur,sub_explo,min_vert_depth,max_ver
 	D_T['co2_state_max']=D_T.apply(f2,args=('temp_max','pressure'), axis=1)
 
 	D_T.to_csv(co2_results+'/'+user_job+'/vertical_temperature_depth_state.csv')
-	print(D_T.describe())
+	#print(D_T.describe())
 	return D_T
 
 
@@ -269,7 +266,7 @@ def intersecting_points_bounding_vertical(grad_sur,spoly,min_vert_depth,max_vert
 	grouped=grouped.apply(lambda x: x.reset_index(drop = True))
 	grouped=grouped.dropna(axis=0)
 	grouped=grouped.set_index(grouped.columns[0]).reset_index()
-	print(grouped.head(20))
+	#print(grouped.head(20))
 	lw=int(min_vert_depth)
 	up=int(max_vert_depth)
 	pw=(1+(42745*0.695e-6))*1000 #kg/m3
@@ -292,7 +289,7 @@ def intersecting_points_bounding_vertical(grad_sur,spoly,min_vert_depth,max_vert
 	D_T['co2_state_max']=D_T.apply(f2,args=('temp_max','pressure'), axis=1)
 
 	D_T.to_csv(co2_results+'/'+user_job+'/vertical_temperature_depth_custom.csv')
-	print(D_T.describe())
+	#print(D_T.describe())
 	return D_T
 
 def intersecting_points_county_vertical(grad_sur,sub_explo,min_vert_depth,max_vert_depth,land_sur_correct,user_job):
@@ -305,7 +302,7 @@ def intersecting_points_county_vertical(grad_sur,sub_explo,min_vert_depth,max_ve
 	grouped=grouped.apply(lambda x: x.reset_index(drop = True))
 	grouped=grouped.dropna(axis=0)
 	grouped=grouped.set_index(grouped.columns[0]).reset_index()
-	print(grouped.head(15))
+	#print(grouped.head(15))
 	lw=int(min_vert_depth)
 	up=int(max_vert_depth)
 	pw=(1+(42745*0.695e-6))*1000 #kg/m3
@@ -317,11 +314,11 @@ def intersecting_points_county_vertical(grad_sur,sub_explo,min_vert_depth,max_ve
 	'temp_max':(np.arange(lw,up,1)*(grouped.Grad.max()/1000))+grouped.TempSur_c.median(),
 	'Grad':grouped.Grad.median(),
 	'Sur':grouped.TempSur_c.median()})
-	print('D_T')
-	print(D_T.head(15))
+	#print('D_T')
+	#print(D_T.head(15))
 
 	
-	print(D_T.apply(f1,args=('temp_cel','pressure'), axis=1))
+	#print(D_T.apply(f1,args=('temp_cel','pressure'), axis=1))
 	D_T['co2_den']=D_T.apply(f1,args=('temp_cel','pressure'), axis=1)
 	D_T['co2_state']=D_T.apply(f2,args=('temp_cel','pressure'), axis=1)
 	D_T['co2_den_climate']=D_T.apply(f1,args=('temp_cel_climate','pressure'), axis=1)
@@ -332,48 +329,48 @@ def intersecting_points_county_vertical(grad_sur,sub_explo,min_vert_depth,max_ve
 	D_T['co2_state_max']=D_T.apply(f2,args=('temp_max','pressure'), axis=1)
 
 	D_T.to_csv(co2_results+'/'+user_job+'/vertical_temperature_depth_county.csv')
-	print(D_T.describe())
+	#print(D_T.describe())
 	return D_T
 
 
 
-def main(grad, sur, co2_profile, co2_depth,min_vert_depth,max_vert_depth,land_sur_correct,co2_US_state,co2_US_county,co2_lon_lat,area,climate,user_job):
-	os.mkdir(co2_results+'/'+user_job)
-	if type(co2_depth)==str:
-		co2_depth=int(co2_depth)
-	if min_vert_depth==0:
-		min_vert_depth==1
-	grad_sur_a=merge_data(grad, sur)
-	grad_sur=grad_sur_calcs(grad_sur_a,co2_depth,land_sur_correct)
-	print('grad_sur_head')
-	print(grad_sur.head(10))
-	if co2_profile =='Horizontal':
-		if area=='co2_all_US_mapping':
-			sub_explo=read_shape_all_US()
-			intersecting_pointsS_all_US(grad_sur,sub_explo,co2_depth,user_job)
-		if area=='co2_state_mapping':
-			sub_explo=read_shape_state(co2_US_state)
-			intersecting_points_state(grad_sur,sub_explo,co2_US_state,co2_depth,user_job)
-		if area=='co2_county_mapping':
-			sub_explo=read_shape_county(co2_US_county,co2_US_state)
-			intersecting_points_county(grad_sur,sub_explo,co2_US_county,co2_depth,user_job)
-		if area=='co2_custom_mapping':
-			spoly=bounding_box(co2_lon_lat)
-			intersecting_points_custom(grad_sur,spoly,co2_depth,user_job)
-	elif co2_profile =='Vertical':
-		if area=='co2_state_mapping':
-			sub_explo=read_shape_state(co2_US_county)
-			D_T=intersecting_points_state_vertical(grad_sur,sub_explo,min_vert_depth,max_vert_depth,land_sur_correct,user_job)
-			ploting_vertical_co2.main(D_T,user_job,climate,land_sur_correct)
-		if area=='co2_county_mapping':
-			sub_explo=read_shape_county(co2_US_county,co2_US_state)
-			D_T=intersecting_points_county_vertical(grad_sur,sub_explo,min_vert_depth,max_vert_depth,land_sur_correct,user_job)
-			ploting_vertical_co2.main(D_T,user_job,climate,land_sur_correct)
-		if area=='co2_custom_mapping':
-			spoly=bounding_box(co2_lon_lat)
-			D_T=intersecting_points_bounding_vertical(grad_sur,spoly,min_vert_depth,max_vert_depth,land_sur_correct,user_job)
-			ploting_vertical_co2.main(D_T,user_job,climate,land_sur_correct)
-	pipe = subprocess.run([directory+'aws_sync_co2_results.sh',str(output_data), str('./co2_results/'+user_job),str(user_job)])
+def main(grad, sur, co2_profile, co2_depth,min_vert_depth,max_vert_depth,land_sur_correct,co2_US_state,co2_US_county,co2_lon_lat,area,climate,user_job,session,result):
+    os.mkdir(co2_results+'/'+user_job)
+    with open(co2_results+'/'+user_job+'/session_parameters.txt', 'w') as f:
+    	print((session,result), file=f)
+    if type(co2_depth)==str:
+    	co2_depth=int(co2_depth)
+    if min_vert_depth==0:
+    	min_vert_depth==1
+    grad_sur_a=merge_data(grad, sur)
+    grad_sur=grad_sur_calcs(grad_sur_a,co2_depth,land_sur_correct)
+    if co2_profile =='Horizontal':
+    	if area=='All US':
+    		sub_explo=read_shape_all_US()
+    		intersecting_points_all_US(grad_sur,sub_explo,co2_depth,user_job)
+    	if area=='US state':
+    		sub_explo=read_shape_state(co2_US_state)
+    		intersecting_points_state(grad_sur,sub_explo,co2_US_state,co2_depth,user_job)
+    	if area=='US county':
+    		sub_explo=read_shape_county(co2_US_county,co2_US_state)
+    		intersecting_points_county(grad_sur,sub_explo,co2_US_county,co2_depth,user_job)
+    	if area=='Custom mapping':
+    		spoly=bounding_box(co2_lon_lat)
+    		intersecting_points_custom(grad_sur,spoly,co2_depth,user_job)
+    elif co2_profile =='Vertical':
+    	if area=='US state':
+    		sub_explo=read_shape_state(co2_US_state)
+    		D_T=intersecting_points_state_vertical(grad_sur,sub_explo,min_vert_depth,max_vert_depth,land_sur_correct,user_job)
+    		ploting_vertical_co2.main(D_T,user_job,climate,land_sur_correct)
+    	if area=='US county':
+    		sub_explo=read_shape_county(co2_US_county,co2_US_state)
+    		D_T=intersecting_points_county_vertical(grad_sur,sub_explo,min_vert_depth,max_vert_depth,land_sur_correct,user_job)
+    		ploting_vertical_co2.main(D_T,user_job,climate,land_sur_correct)
+    	if area=='Custom mapping':
+    		spoly=bounding_box(co2_lon_lat)
+    		D_T=intersecting_points_bounding_vertical(grad_sur,spoly,min_vert_depth,max_vert_depth,land_sur_correct,user_job)
+    		ploting_vertical_co2.main(D_T,user_job,climate,land_sur_correct)
+    pipe = subprocess.run([directory+'aws_sync_co2_results.sh',str(output_data), str('./co2_results/'+user_job),str(user_job)])
 
 	#vertical_profile(grad_sur)
 

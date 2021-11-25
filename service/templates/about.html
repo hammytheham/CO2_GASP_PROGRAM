@@ -1,14 +1,67 @@
 {% extends "base.html"%}
 
 {% block content %}
-<h2> About CO2-GASP </h2>
+<h2> About CO<sub>2</sub>-GASP </h2>
+<div>
+Developer: <a href="https://twitter.com/hamish95">Hamish Robertson - h.alastair.r (at) gmail.com</a><br>
+Co-authors: <a href="https://research-information.bris.ac.uk/en/persons/fiona-f-whitaker"> Fiona Whitaker (Uni. Bristol)</a>
+</div><br>
 
-<p>CO2-GASP (CO2, geochemcial assessment of seqeustration potential) is desgined to enable users to quickly evaluate and simulate CO2 sequestration at a range of scales. CO2-GASP was primarily developed by Hamish Robertson, with Fiona Whitaker, Cathy Holis and Hilary Corlett providing additional review. <br>
+<h3> Abreviations </h3>
+The following are abreviations to describe the three different datasets that underpin this study. 
+<ul>
+    <li><b>PWGD</b> - the USGS Produced Water database (Blondes et al., 2016) </li>
+    <li><b>SMUH</b> - geothermal gradient data derived from the Southern Methodist University Heatflow database (Blackwell et al., 2011) </li>
+    <li><b>MODIS</b> - MODIS satellite derived land surface temperatures (Bechtel, 2015) </li>
+</ul><br>
 
-Full documentation is avalible as a downloadable PDF here: <br>
+<center><div id="toc_container">
+<p class="toc_title">Contents</p>
+<ul class="toc_list">
+  <li><a href="/Introduction_header">1 Introduction</a></li>
+  <li><a href="/Methodology_heading">2 Methodology </a>
+  <ul>
+    <li><a href="/Background_methodology_heading">2.1 Methodology - Background</a>
+    <ul>
+      <li><a href="/Background_methodology_heading#code_architecture">2.1.1 Code architecture and PHREEQC modification</a></li>
+      <li><a href="/USGS_Produced_Water_Database">2.1.2 Produced Water database</a></li>
+      <ul>
+        <li><a href="/USGS_Produced_Water_Database#Produced_water">What is produced water?</a></li>
+      </ul>
+      <li><a href="/Heatflow_data">2.1.3 Geothermal gradient data</a></li>
+      <li><a href="/MODIS_data">2.1.4 Land surface temperature data</a></li>
+      <li><a href="/Robertson_et_al">2.1.5 Robertson et al. (2021)</a></li>
+      <ul>
+        <li><a href="/Robertson_et_al#groundtruth_robertson_2021">2.1.5.1 Groundtruthing</a></li>
+      </ul>
+    </ul>
+    </li>
+    <li><a href="/User_method"> 2.2 Methodology - User</a>
+    <ul>
+      <li><a href="/free_state"> 2.2.1 Free state CO<sub>2</sub> and geothermal data</a></li>
+      <ul>
+          <li><a href="/free_state#horizontal_profile_method">2.2.1.1 Horizontal profile</a></li> 
+          <li><a href="/free_state#vertical_profile_method">2.2.1.2 Vertical profile</a></li>
+      </ul>
+      <li><a href="/geochemical_modelling">2.2.2 Geochemical modelling</a></li>
+    </ul>
+    </li>
+  </li>
+  </ul>
+  <li><a href="/Results_heading">3 Results</a>
+  <ul>
+    <li><a href="/Results_heading#free_state_results">3.1 Free state CO<sub>2</sub> and geothermal data results </a></li>
+    <ul>
+      <li><a href="/Results_heading#free_state_Horizontal_results">3.1.1 Horizontal results</a></li>
+      <li><a href="/Results_headin#free_state_vertical_results">3.1.2 Vertical results</a></li>
+    </ul>
+      <li><a href="/geochemical_modelling_results">3.2 Geochemical modelling results </a></li>
+  </li>
+  </ul>
+  <li><a href="/reference_heading">4 References</a></li>
+</ul>
+</div>
 
-Relevant papers: <br>
-
-</p>
+<center><a href="/Introduction_header"> Introduction >></a> 
 
 {% endblock %}

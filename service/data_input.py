@@ -23,9 +23,10 @@ class Data_input(FlaskForm):
     database_select=RadioField('Database Filter',choices=SelectDatabaseChoices)
     
     SelectField_choices=['Horizontal','Vertical']
-    co2_profile=RadioField('CO2 Profile',choices=SelectField_choices)
-    
-    SelectMapping_choices=['co2_all_US_mapping','co2_state_mapping','co2_county_mapping','co2_custom_mapping']
+    co2_profile=RadioField('Choose a CO₂ Profile',choices=SelectField_choices)
+
+    #SelectMapping_choices=['co2_all_US_mapping','co2_state_mapping','co2_county_mapping','co2_custom_mapping']
+    SelectMapping_choices=['All US','US state','US county','Custom mapping']
     mapping_select=RadioField('Mapping Choices',choices=SelectMapping_choices)
     
     us_state=['Alabama','Arizona','Arkansas','California','Colorado'
@@ -40,7 +41,7 @@ class Data_input(FlaskForm):
     
     US_county=StringField('Enter county(ies)')
     
-    co2_depth=StringField('CO2 target depth')
+    co2_depth=StringField('Input a CO₂ target depth (m)')
 
     land_correct=StringField('Landsurface correction')
 
@@ -57,7 +58,7 @@ class Data_input(FlaskForm):
     Selectclimate_choices=[True,False]
     climate=RadioField('Plot land surface correction?',choices=Selectclimate_choices)
    
-    submit=SubmitField('Submit parameters')
+    submit=SubmitField('Submit parameters',render_kw={"onclick": "window.location.href= 'wait_screen.html'"})
 
 class PhreeqcOptions(FlaskForm):
     'For geochemical modelling'
@@ -87,6 +88,21 @@ class PhreeqcOptions(FlaskForm):
     mineral_select_4=SelectField('Select Mineral 4', choices=minerals)
     moles_4=StringField('Enter moles of select mineral 4')
     
+    
+    sec_mineral_select_1=SelectField('Select Secondary Mineral 1', choices=minerals)
+    sec_moles_1=StringField('Enter moles of select mineral 1')
+    
+    sec_mineral_select_2=SelectField('Select Secondary Mineral 2', choices=minerals)
+    sec_moles_2=StringField('Enter moles of select mineral 2')
+
+    sec_mineral_select_3=SelectField('Select Secondary Mineral 3', choices=minerals)
+    sec_moles_3=StringField('Enter moles of select mineral 3')
+
+    sec_mineral_select_4=SelectField('Select Secondary Mineral 4', choices=minerals)
+    sec_moles_4=StringField('Enter moles of select mineral 4')
+    
+    
+    
     mineral_select_5=SelectField('Select Mineral 5', choices=minerals)
     moles_5=StringField('Enter moles of select mineral 5')    
 
@@ -111,4 +127,43 @@ class PhreeqcOptions(FlaskForm):
     mineral_select_12=SelectField('Select Mineral 12', choices=minerals)
     moles_12=StringField('Enter moles of select mineral 12')
     
+    radius=StringField('Enter radius of cylinder (m)')
+
+    height=StringField('Enter height of cylinder (m)')    
+    
+    porosity=StringField('Porosity (e.g. 0.2)') 
+    
     submit=SubmitField('Submit parameters')
+
+
+class volume_to_mole(FlaskForm):
+    minerals=['','Akermanite (Ca2MgSi2O7)','Anhydrite (CaSO4)','Anthophyllite (Mg7Si8O22(OH)2)','Antigorite (Mg48Si34O85(OH)62)',
+    'Aragonite (CaCO3)','Arcanite (K2SO4)','Artinite (Mg2CO3(OH)2:3H2O)','Barite (BaSO4)','Bischofite (MgCl2:6H2O)',
+    'Bloedite (Na2Mg(SO4)2:4H2O)','Brucite (Mg(OH)2)','Burkeite (Na6CO3(SO4)2)','Calcite (CaCO3)','Carnallite (KMgCl3:6H2O)',
+    'Celestite (SrSO4)','Chalcedony (SiO2)','Chrysotile (Mg3Si2O5(OH)4)','Diopside (CaMgSi2O6)','Dolomite (CaMg(CO3)2)',
+    'Enstatite (MgSiO3)','Epsomite (MgSO4:7H2O)','Forsterite (Mg2SiO4)','Gaylussite (CaNa2(CO3)2:5H2O)','Glaserite (NaK3(SO4)2)',
+    'Glauberite (Na2Ca(SO4)2)','Goergeyite (K2Ca5(SO4)6H2O)','Gypsum (CaSO4:2H2O)','Halite (NaCl)','Hexahydrite (MgSO4:6H2O)',
+    'Huntite (CaMg3(CO3)4)','Kainite (KMgClSO4:3H2O)','Kalicinite (KHCO3)','Kieserite (MgSO4:H2O)','Labile_S (Na4Ca(SO4)3:2H2O)',
+    'Leonhardite (MgSO4:4H2O)','Leonite (K2Mg(SO4)2:4H2O)','Magnesite (MgCO3)','MgCl2_2H2O (MgCl2:2H2O)','MgCl2_4H2O (MgCl2:4H2O)',
+    'Mirabilite (Na2SO4:10H2O )','Misenite (K8H6(SO4)7)','Nahcolite (NaHCO3)','Natron (Na2CO3:10H2O)','Nesquehonite (MgCO3:3H2O)',
+    'Pentahydrite (MgSO4:5H2O)','Pirssonite (Na2Ca(CO3)2:2H2O)','Polyhalite (K2MgCa2(SO4)4:2H2O) ','Portlandite (Ca(OH)2)',
+    'Quartz (SiO2)','Schoenite (K2Mg(SO4)2:6H2O)','Sepiolite(d) (Mg2Si3O7.5OH:3H2O)','Sepiolite (Mg2Si3O7.5OH:3H2O)','SiO2(a) (SiO2) ',
+    'Sylvite (KCl)','Syngenite (K2Ca(SO4)2:H2O)','Talc (Mg3Si4O10(OH)2)','Thenardite (Na2SO4)','Trona (Na3H(CO3)2:2H2O)',
+    'Borax (Na2(B4O5(OH)4):8H2O)','Boric_acid,s (B(OH)3)','KB5O8:4H2O (KB5O8:4H2O)','K2B4O7:4H2O (K2B4O7:4H2O)','NaBO2:4H2O (NaBO2:4H2O)',
+    'NaB5O8:5H2O (NaB5O8:5H2O)']
+    mineral_select_1=SelectField('Select Mineral 1', choices=minerals)
+    volume_1=StringField('Enter volume (%) of select mineral 1')
+
+    mineral_select_2=SelectField('Select Mineral 2', choices=minerals)
+    volume_2=StringField('Enter volume (%) of select mineral 2')
+
+    mineral_select_3=SelectField('Select Mineral 3', choices=minerals)
+    volume_3=StringField('Enter volume (%) of select mineral 3')
+
+    mineral_select_4=SelectField('Select Mineral 4', choices=minerals)
+    volume_4=StringField('Enter volume (%) of select mineral 4')
+    
+    submit=SubmitField('Submit parameters')
+
+    
+    

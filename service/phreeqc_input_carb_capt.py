@@ -3,15 +3,14 @@ import numpy as np
 import pandas as pd
 import sys
 
-data='INPUT_DATA'
-dolomite_stats='INPUT_DATA/dolomite_stats'
-geochemical_result='/home/ec2-user/environment/CO2_GASP_PROGRAM/temp/OUTPUT_DATA/geochemical_result'
+from file_paths import s3_dolomite_stats,geochemical_result
+
 
 
 def depth_RI(experi,smallusgs):
-	RI_vals = pd.read_csv('s3://co-2-gasp-bucket/'+dolomite_stats+'/DepthID_RI.csv',sep=',',header=0,usecols=list(range(4)))
-	DepthID_VALS = pd.read_csv('s3://co-2-gasp-bucket/'+dolomite_stats+'/DepthID_VALUES.csv',sep=',',header=0,usecols=list(range(2)))
-	FIELD_RI_vals = pd.read_csv('s3://co-2-gasp-bucket/'+dolomite_stats+'/Field_RI.csv',sep=',',header=0,usecols=list(range(4)))
+	RI_vals = pd.read_csv(s3_dolomite_stats+'/DepthID_RI.csv',sep=',',header=0,usecols=list(range(4)))
+	DepthID_VALS = pd.read_csv(s3_dolomite_stats+'/DepthID_VALUES.csv',sep=',',header=0,usecols=list(range(2)))
+	FIELD_RI_vals = pd.read_csv(s3_dolomite_stats+'/Field_RI.csv',sep=',',header=0,usecols=list(range(4)))
 
 
 	print(len(DepthID_VALS['DepthID'].unique()))
@@ -26,7 +25,7 @@ def depth_RI(experi,smallusgs):
 
 	DepthID_VALS_v2.loc[DepthID_VALS_v2.DepthID=='BLANK','RI_J21']=DepthID_VALS_v2.Field_RI_J21#1.475448702559207881e+01  #RI field RI
 	#DepthID_VALS_v2 = DepthID_VALS_v2.drop(DepthID_VALS_v2.columns[0], axis=1)
-	DepthID_VALS_v2.to_csv('s3://co-2-gasp-bucket/'+dolomite_stats+'/DepthID_VALS_v2.csv',sep=',',index=False)
+	DepthID_VALS_v2.to_csv(s3_dolomite_stats+'/DepthID_VALS_v2.csv',sep=',',index=False)
 	#DepthID_VALS_v2=DepthID_VALS.merge(RI_vals,on='DepthID')
 	#print(experi)
 	#print(smallusgs)
@@ -37,8 +36,9 @@ def depth_RI(experi,smallusgs):
 	return DepthID_VALS_v2,RI_vals
 
 
-def phreeqc_carb_capt_main_dolomite_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals,user_job,geochem_minerals):
+def phreeqc_carb_capt_main_dolomite_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals,user_job,geochem_minerals,geochem_minerals_secondary):
 	"""For use in calculating the equilibrium constants"""
+	print(experi.head(10))
 	smallusgs = smallusgs.rename(columns={'ID': 'Number','LITHOLOGY':'Description'})
 	with open(geochemical_result+'/'+user_job+'/Carb_capt_user_job.txt', 'w') as f:
 		f.write('\n \n \n')
@@ -66,10 +66,10 @@ def phreeqc_carb_capt_main_dolomite_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_v
 			f.write('-reset false \n')
 			f.write('-solution true \n')
 			f.write('-temperature true \n')
-			f.write('-saturation_indices  %s CO2(g) \n' % ' '.join(geochem_minerals.keys()) ) #Dolomite_new Calcite Halite
+			f.write('-saturation_indices  %s %s CO2(g) \n' % (' '.join(geochem_minerals.keys()),' '.join(geochem_minerals_secondary.keys())) ) #Dolomite_new Calcite Halite
 			f.write('-activities Mg+2 Ca+2 CO3-2 \n')
 			f.write('-ionic_strength true \n')
-			f.write('-equilibrium_phases %s CO2(g) \n' % ' '.join(geochem_minerals.keys()))
+			f.write('-equilibrium_phases %s %s CO2(g) \n' % (' '.join(geochem_minerals.keys()),' '.join(geochem_minerals_secondary.keys())))
 
 	with open(geochemical_result+'/'+user_job+'/Carb_capt_user_job.txt', 'a') as f:
 		for i in range(len(smallusgs)):
@@ -91,13 +91,14 @@ def phreeqc_carb_capt_main_dolomite_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_v
 			f.write('%i \n' % experi.iloc[i,2])
 			f.write('EQUILIBRIUM_PHASES %i \n' % experi.iloc[i,3])
 			for key,value in geochem_minerals.items():
-				f.write('%s 0.0 %.2f \n' % (key,float(value))  )
-			f.write('CO2(g) %.2f 10000 \n'% np.log10(experi.iloc[i,2]))  #partial pressure drop by 20%
+				f.write('%s 0.0 %.2f \n' % (key,float(value)))
+			for key,value in geochem_minerals_secondary.items():
+				f.write('%s 0.0 %.2f \n' % (key,float(value)))
+			f.write('CO2(g) %.2f 10000 \n'% np.log10(experi.iloc[i,2])) 
 			f.write('END \n')
 
 
-def main(experi,smallusgs,eq_constants_value,user_job,geochem_minerals):
-	os.mkdir(geochemical_result+'/'+user_job)
+def main(experi,smallusgs,eq_constants_value,user_job,geochem_minerals,geochem_minerals_secondary):
 	experi['ID_11480']=experi['ID']+len(experi)
 	experi['ID_22960']=experi['ID']+(len(experi)*2)
 	print(experi)
@@ -105,7 +106,7 @@ def main(experi,smallusgs,eq_constants_value,user_job,geochem_minerals):
 	smallusgs.to_csv(geochemical_result+'smallusgs')
 	print(len(DepthID_VALS_v2))
 	#currently using local dolomite doesnt work. Only concentrating on the main dolomite constant
-	phreeqc_carb_capt_main_dolomite_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals,user_job,geochem_minerals)
+	phreeqc_carb_capt_main_dolomite_pre_eq(experi,smallusgs,DepthID_VALS_v2,RI_vals,user_job,geochem_minerals,geochem_minerals_secondary)
 
 
 if __name__ == "__main__":

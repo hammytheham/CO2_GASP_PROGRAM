@@ -12,9 +12,9 @@ water_density_value = []
 
 #co2_profile ='Horizontal' # defunct in web app #'Vertical generates a 2-D Vertical slice of CO2 density and pressure at a location 'Horizontal' - generates a flat 2D profile
 #co2_all_US_mapping=False
-#co2_state_mapping=False
-#co2_county_mapping=False
-#co2_custom_mapping = True
+#US state=False
+#US county=False
+#Custom mapping = True
 #co2_US_state=['Texas'] #see menu for options
 #co2_US_county=['Lee']#'King','Midland','Martin']
 

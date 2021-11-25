@@ -1,0 +1,95 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+<h2> Volume to moles conversion </h2>
+<form action="" method="post">
+<div>
+Enter the volumetric proportions (%) of up to 5 minerals that characterize the mineral assemblage. The volume is normalized to 100 cm3 of rock.<br>
+
+For example we present the volume to moles conversion for a limestone (<a href="#limestone">table. 1</a>) and sandstone (<a href="#sandstone">table. 2</a>) mineralogical composition;<br>
+
+<table id="limestone">
+  <tr>
+    <th>Mineral</th>
+    <th>Volumetric proportion (%)</th>
+    <th>Moles in 100cm3</th>
+  </tr>
+  <tr>
+    <td>Calcite</td>
+    <td>90</td>
+    <td>2.42</td>
+  </tr>
+  <tr>
+    <td>Dolomite</td>
+    <td>10</td>
+    <td>0.15</td>
+  </tr>
+</table>
+Table.1 Mineral proportion/moles of a limestone host lithology.
+<br><br>
+
+<table id="sandstone">
+  <tr>
+    <th>Mineral</th>
+    <th>Volumetric proportion (%)</th>
+    <th>Moles in 100cm3</th>
+  </tr>
+  <tr>
+    <td>Quartz</td>
+    <td>90</td>
+    <td>3.94</td>
+  </tr>
+  <tr>
+    <td>Calcite</td>
+    <td>5</td>
+    <td>0.13</td>
+  </tr>
+  <tr>
+    <td>Dolomite</td>
+    <td>5</td>
+    <td>0.08</td>
+  </tr>
+</table>
+Table.2 Mineral proportion/moles of a sandstone host lithology. In a future update I will add in the thermodynamics of feldspar minerals that tend to be more common in sandstones.
+</div>
+
+<p>
+{{form.mineral_select_1.label}}<br>
+{{form.mineral_select_1}}<br>
+</p>
+<p>
+{{form.volume_1.label}}<br>
+{{form.volume_1}}<br>
+</p>
+<p>
+{{form.mineral_select_2.label}}<br>
+{{form.mineral_select_2}}<br>
+</p>
+<p>
+{{form.volume_2.label}}<br>
+{{form.volume_2}}<br>
+</p>
+<p>
+{{form.mineral_select_3.label}}<br>
+{{form.mineral_select_3}}<br>
+</p>
+<p>
+{{form.volume_3.label}}<br>
+{{form.volume_3}}<br>
+</p>
+<p>
+{{form.mineral_select_4.label}}<br>
+{{form.mineral_select_4}}<br>
+</p>
+<p>
+{{form.volume_4.label}}<br>
+{{form.volume_4}}<br>
+</p>
+<p>
+{{form.submit()}}
+</p>
+</form>
+</div>
+
+{% endblock %}

@@ -12,8 +12,14 @@ from geopandas.tools import sjoin
 import data_import
 import subprocess
 
+from file_paths import s3_geotherm_result,directory
+
 ##Need to upgrade geopandas to 8.1 for this part of the script to work.
-"""Script run at 0.1 dp resolution """
+"""Script run at 0.1 dp resolution 
+Note have changed the INPUT_DATA/geochemical_result_files type locations (old), was data_import.geotherm_result etc, to S3 locations. Script hasnt been run yet
+"""
+
+
 
 def read_geotherm(geo):
     #read heatflow csv. IntervalCorrectedGradient is the geothermal gradient
@@ -61,7 +67,7 @@ def interp_gradient(interp):
     return interp
 
 def read_shape():
-    country_boundary_us = gpd.read_file(data_import.geotherm_result+'/cb_2018_us_nation_5m/cb_2018_us_nation_5m.shp')
+    country_boundary_us = gpd.read_file(s3_geotherm_result+'/cb_2018_us_nation_5m/cb_2018_us_nation_5m.shp')
     print('read in')
     exploded=country_boundary_us.explode()
     box=[(-128.600464,24.374619),(-128.600464,50.406767),(-60.748901,50.406767),(-60.748901,24.374619)]
@@ -81,16 +87,16 @@ def intersecting_points(interp,sub_explo):
     grouped=grouped.apply(lambda x: x.reset_index(drop = True))
     grouped=grouped.dropna(axis=0)
     grouped=grouped.set_index(grouped.columns[0]).reset_index()
-    grouped.to_file(driver='ESRI Shapefile', filename=data_import.geotherm_result+'/interp_masked_out_1dp_no_filter.shp')
-    pipe = subprocess.run(data_import.directory+'/gdal_command.sh')
+    grouped.to_file(driver='ESRI Shapefile', filename=s3_geotherm_result+'/interp_masked_out_1dp_no_filter.shp')
+    pipe = subprocess.run(directory+'gdal_command.sh')
     print('gdal command run')
     print(grouped.head())
-    grouped.to_csv(data_import.geotherm_result+'/geotherm_grad_grouped_1dp_no_filter.csv')
+    grouped.to_csv(s3_geotherm_result+'/geotherm_grad_grouped_1dp_no_filter.csv')
     return grouped
 
 def read_grouped():
     print('Importing geothermal gradients')
-    grouped=pd.read_csv(data_import.geotherm_result+'/geotherm_grad_grouped_1dp_no_filter.csv')
+    grouped=pd.read_csv(s3_geotherm_result+'/geotherm_grad_grouped_1dp_no_filter.csv')
     grouped=grouped.drop([grouped.columns[0],'index_right','geometry'],axis=1)
     grouped=grouped.round({'Lat':1,'Lon':1})  #This is just formatting the csv correctly, for some reason wasn't happy
     grouped=grouped.round({'Grad':1})

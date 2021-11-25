@@ -3,7 +3,8 @@ import pandas as pd
 import numpy as np
 import data_import
 ## MODIS data analysis - not run by the main file nor set up to
-MODIS_results = '/Users/hamish/github/co2_gasp/INPUT_DATA/MODIS_result_files'
+from file_paths import s3_MODIS_results
+# MODIS_results = '/Users/hamish/github/co2_gasp/INPUT_DATA/MODIS_result_files' old
 
 
 
@@ -75,12 +76,12 @@ def processing3(tiles_df):
     merged=pd.concat(tiles_df.values())
     merged=merged[merged.mas != -9999.0]
     merged.columns = ['Lat', 'Lon','TempSur']
-    merged.to_csv(MODIS_results+'/merged_data_2',index=False,float_format = "%.1f",)
+    merged.to_csv(s3_MODIS_results+'/merged_data_2',index=False,float_format = "%.1f",)
     #return merged
 
 def read_modis():
     print('Importing MODIS data')
-    merged=pd.read_csv(MODIS_results+'/merged_data_2') #names=['Lat','Lon','TempSur']
+    merged=pd.read_csv(s3_MODIS_results+'/merged_data_2') #names=['Lat','Lon','TempSur']
     print(merged.head(10))
     merged=merged.drop_duplicates(subset=['Lat','Lon'],keep='first')
     return merged
