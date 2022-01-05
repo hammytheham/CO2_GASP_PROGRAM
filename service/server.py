@@ -114,7 +114,7 @@ def sim2():#
         values=[result[x] for x in moles_keys]
         values=[x for x in values if x]
         geochem_minerals=dict(zip(a,values))
-        
+
         keys=[result[x] for x in mineral_keys_secondary]
         keys=[x for x in keys if x]
         b=[]
@@ -149,11 +149,11 @@ def about():
 @app.route('/Introduction_header')
 def serve_1():
     return render_template('introduction_1.html')
-    
+
 @app.route('/Methodology_heading')
 def serve_2():
     return render_template('methodology_2.html')
-    
+
 @app.route('/Background_methodology_heading')
 def serve_3():
     return render_template('methodology_background_1.html')
@@ -197,9 +197,9 @@ def serve_12():
 @app.route('/reference_heading')
 def serve_13():
     return render_template('references.html')
-                                    
 
-    
+
+
 
 
 
@@ -523,15 +523,45 @@ def mol_vol():
         for row in geochem_minerals.index.values:
             geochem_minerals['Moles in 100cm3'][row]=(geochem_minerals['Vol. prop (%)'][row]*float(mineral_density[row]))/float(mineral_mr[row])
         table_d=geochem_minerals.to_html()
-        return render_template('display.html',table=table_d)        
+        return render_template('display.html',table=table_d)
     return render_template('molar_volume_conversion.html',form=data)
 
+
+@app.route('/ajs_modelling',methods=['GET','POST'])
+def mol_vol():
+    data=volume_to_mole()
+    if data.is_submitted():
+        result=request.form.to_dict()
+        print(result)
+        mineral_density = eval(open(directory+'Mineral_dictionary_density.txt').read())
+        mineral_mr = eval(open(directory+'Mineral_dictionary_mr.txt').read())
+        mineral_density={k.replace('d_', '') : v for k, v in mineral_density.items()}
+        mineral_mr={k.replace('d_', '') : v for k, v in mineral_mr.items()}
+        keys=[result[x] for x in mineral_keys]
+        keys=[x for x in keys if x]
+        a=[]
+        for i in keys:
+            if i == 'Dolomite':
+                a.append('Dolomite_new')
+            else:
+                a.append(return_key(i))
+        print(a)
+        values=[result[x] for x in moles_keys]
+        values=[float(x) for x in values if x]
+        geochem_minerals=pd.DataFrame([(dict(zip(a,values)))]).transpose()
+        geochem_minerals.rename(columns={geochem_minerals.columns[0]: 'Vol. prop (%)'}, inplace=True)
+        geochem_minerals['Moles in 100cm3']=np.nan
+        for row in geochem_minerals.index.values:
+            geochem_minerals['Moles in 100cm3'][row]=(geochem_minerals['Vol. prop (%)'][row]*float(mineral_density[row]))/float(mineral_mr[row])
+        table_d=geochem_minerals.to_html()
+        return render_template('display.html',table=table_d)
+    return render_template('molar_volume_conversion.html',form=data)
 
 
 if __name__ == '__main__':
     #path = os.getcwd()
     #print('current path')
-    #print(path)    
+    #print(path)
     #files = os.listdir(os.curdir)
     #print(files)
     rawusgs, grad, sur, medusgs = data_import.main()

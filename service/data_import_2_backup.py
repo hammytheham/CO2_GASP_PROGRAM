@@ -326,12 +326,48 @@ def data_processing6(usgs1,sur,grad):
 	medusgs.to_csv(s3_geochem_result+'/merged_data_all_samples', index=False)
 	return medusgs
 
-def main(rawusgs,grad,sur):
-	usgs=data_processing1(rawusgs) # 1 - turn on for full function
+
+
+def intersecting_points(grad_sur,sub_explo):
+	geometry=[Point(xy) for xy in zip(grad_sur.Lon_OLD, grad_sur.Lat_OLD)]
+	crs = {'init': 'epsg:4269'} #http://www.spatialreference.org/ref/epsg/2263/
+	grad_sur = gpd.GeoDataFrame(grad_sur, crs=crs, geometry=geometry)
+	pointsinPolys_intersects=sjoin(grad_sur,sub_explo,how="left")
+	grouped = pointsinPolys_intersects[pointsinPolys_intersects['index_right'].notna()]
+	grouped.reset_index(inplace=True)
+	print('grouped.head')
+	print(grouped.head(10))
+	return grouped
+
+
+
+def location_select(medusgs,area,co2_US_county,co2_US_state,co2_lon_lat):
+	if area=='All US':
+		sub_explo=CO2_density_state.read_shape_all_US()
+		grouped=intersecting_points(medusgs,sub_explo)
+	if area=='US state':
+		sub_explo=CO2_density_state.read_shape_state(co2_US_state)
+		grouped=intersecting_points(medusgs,sub_explo)
+	if area=='US county':
+		sub_explo=CO2_density_state.read_shape_county(co2_US_county,co2_US_state)
+		grouped=intersecting_points(medusgs,sub_explo)
+	if area=='Custom mapping':
+		spoly=CO2_density_state.bounding_box(co2_lon_lat)
+		grouped=intersecting_points(medusgs,sub_explo)
+	return grouped
+
+
+def main(rawusgs,grad,sur,area,co2_US_county,co2_US_state,co2_lon_lat):
+#def main(rawusgs,grad,sur):
+	#usgs=data_processing1(rawusgs) # 1 - turn on for full function
 	#usgs1=data_processing2(usgs)
-	usgs1=data_processing2_all_samples(usgs) #2 - turn on for full function
-	medusgs=data_processing6(usgs1,sur,grad) # 3 - turn on for full function
-	return medusgs
+	#usgs1=data_processing2_all_samples(usgs) #2 - turn on for full function
+	#medusgs=data_processing6(usgs1,sur,grad) # 3 - turn on for full function
+	medusgs=pd.read_csv(s3_geochem_result+'/merged_data_all_samples')
+	#medusgs=pd.read_csv(s3_geochem_result+'/merged_data')
+	medusgs_new=location_select(medusgs,area,co2_US_county,co2_US_state,co2_lon_lat)
+
+	return medusgs_new
 
 if __name__ == "__main__":
 	main()
