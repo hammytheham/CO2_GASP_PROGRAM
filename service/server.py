@@ -38,10 +38,10 @@ def home():
     if data.is_submitted():
         result=request.form.to_dict()
         print(result)
-        if result['modelling_option']=='Option 1':
+        if result['modelling_option']=='Free state/Geothermal':
             session['modelling_option']='geothermal'
             return redirect('/sim1')
-        if result['modelling_option']=='Option 2':
+        if result['modelling_option']=='Geochemical':
             session['modelling_option']='geochemical'
             return redirect('/horizontal')
     return render_template("index.html",form=data)
@@ -423,6 +423,8 @@ def vertical():
     data=Data_input()
     if data.is_submitted():
         result=request.form.to_dict()
+        if result['mapping_select']=='All US':
+            return redirect('/vertical_US')
         if result['mapping_select']=='US state':
             return redirect('/vertical_state')
         if result['mapping_select']=='US county':
@@ -433,6 +435,26 @@ def vertical():
     return render_template('vertical.html',form=data)
 
 
+@app.route('/vertical_US',methods=['GET','POST'])
+def vertical_US():
+    data=Data_input()
+    if data.is_submitted():
+        result=request.form.to_dict()
+        print(result)
+        co2_profile='Vertical'
+        area='All US'
+        co2_US_state=None
+        co2_US_county=None
+        co2_lon_lat=None
+        min_vert_depth=None
+        max_vert_depth=None
+        user_job=str(randint(10000000, 99999999))
+        job = q.enqueue(CO2_density_state_MAIN, args=(grad, sur, co2_profile, result['co2_depth'],
+        result['land_correct'],min_vert_depth,max_vert_depth, co2_US_state, co2_US_county,co2_lon_lat,area,
+        result['climate'],user_job,str(session),result),job_timeout=500)
+        session['job_id']=job.id
+        return redirect('/co2_result_download')
+    return render_template('all_us_vertical.html',form=data)
 
 @app.route('/vertical_state',methods=['GET','POST'])
 def state_vertical():
@@ -528,7 +550,7 @@ def mol_vol():
 
 
 @app.route('/ajs_modelling',methods=['GET','POST'])
-def mol_vol():
+def ajs_model():
     data=volume_to_mole()
     if data.is_submitted():
         result=request.form.to_dict()

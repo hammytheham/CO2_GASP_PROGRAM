@@ -8,33 +8,37 @@
 <div id="content">
 <h2> Horizontal Geothermal / CO2 profile - State level </h2>
 <form action="" method="post">
-<p>
-This filter generates geothermal and CO<sub>2</sub> horizontal profiles for an individual state. <br>
-</p>
+<center>
 <p>
 {{form.US_state_select.label}}<br>
 {{form.US_state_select}}<br>
 </p>
 <p>
 {{form.co2_depth.label}}<br>
-{{form.co2_depth}}<br>
+{{form.co2_depth}}<br><br>
 </p>
 <div>
-<b>Optional</b> The land surface temperature correction parameters enables the user to generate an additional profile that can evaluate variations in land surface temperature (e.g. due to climate change).<br> 
-&nbsp;&nbsp;&nbsp;&nbsp;For example specifying a land surface correction of 2 will add 2°C to the measured land surface temperature. The pre-existing geothermal gradient remains constant. For further details see here for <a href="/about#free_state_Horizontal_results">example results</a> and here for <a href="/about#horizontal_profile_method">further information</a>.
+<b>Optional (can be left blank)</b> The land surface temperature correction parameters enables the user to generate an additional profile that can evaluate variations in land surface temperature (e.g. due to climate change).<br> 
+&nbsp;&nbsp;&nbsp;&nbsp;For example specifying a land surface correction of 2 will add 2°C to the measured land surface temperature. The pre-existing geothermal gradient remains constant. For further details see the <a href="/about#free_state_Horizontal_results">example results</a> and  <a href="/about#horizontal_profile_method">further information</a>.
 </div>
 <p>
 {{form.climate.label}}<br>
-{{form.climate}}<br>
+{% for subfield in form.climate %}
+    <tr>
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label }}</td>
+    </tr>
+{% endfor %}
 </p>
 <p>
 {{form.land_correct.label}}<br>
 {{form.land_correct}}<br>
 </p>
 <p>
-<input type="submit" name="anything_submit" value="Submit" onclick="loading();">
+<input type="submit" name="anything_submit" value="Submit parameters" onclick="loading();">
 </p>
 </form>
+</center>
 </div>
 
 {% endblock %}

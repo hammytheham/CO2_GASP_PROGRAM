@@ -8,13 +8,14 @@
 <div id="content">
 <h2> Vertical Geothermal / CO<sub>2</sub> profile - Custom </h2>
 <form action="" method="post">
+<center>
 <div>
 This filter generates geothermal and CO<sub>2</sub> vertical profiles for a custom user specified area (bounding box). <br>
-The minimum number of vertices for the bounding box is 4; i.e. a rectangular bounding box (additional vertices can be specified). For a rectangular box seperately enter the 4 latitude and 4 longitude coordinates seperated by a comma. For example for a bounding box with vertices of (30, -101), (32,-101), (32,-98) and (30,-98); <br>
-&nbsp;&nbsp;&nbsp;&nbsp;For example for a bounding box with vertices of (30, -101), (32,-101), (32,-98) and (30,-98); <br>
-For latitude enter: 30,32,32,30 <br>
-For longitude enter: -101,-101,-98,-98 <br> <br>
-To generate bounding box co-ordinates see <a href="https://boundingbox.klokantech.com/">here</a>.<br>
+The minimum number of vertices for the bounding box is 4; i.e. a rectangular bounding box (additional vertices can be specified). As far as I am aware there is no maximum number of vertices. For a rectangular box seperately enter the 4 latitude and 4 longitude coordinates seperated by a comma.<br><br>
+For example for a rectangular bounding box with vertices of (30, -101), (32,-101), (32,-98.5) and (30,-98.5); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;For latitude enter: 30,32,32,30 <br>
+&nbsp;&nbsp;&nbsp;&nbsp;For longitude enter: -101,-101,-98.5,-98.5 <br>
+To generate bounding box co-ordinates with an interactive map see <a href="https://boundingbox.klokantech.com/">here</a>.<br><br>
 </div>
 <p>
 {{form.lat_bounding.label}}<br>
@@ -25,31 +26,30 @@ To generate bounding box co-ordinates see <a href="https://boundingbox.klokantec
 {{form.lon_bounding}}<br>
 </p>
 <p>
-Choose a range of depths of interest (e.g 0m as minimum and 1000m as maximum);
-</p>
-<p>
-{{form.min_vert_depth.label}}<br>
-{{form.min_vert_depth}}<br>
-</p>
-<p>
-{{form.max_vert_depth.label}}<br>
-{{form.max_vert_depth}}<br>
+{{form.co2_depth.label}}<br>
+{{form.co2_depth}}<br>
 </p>
 <div>
-<b>Optional</b> The land surface temperature correction parameters enable the user to generate an additional profile that can evaluate variations in land surface temperature (e.g. due to climate change).<br>
-&nbsp;&nbsp;&nbsp;&nbsp;For example specifying a land surface correction of 2 will add 2°C to the measured land surface temperature. The pre-existing geothermal gradient remains constant. See the <a href="/about">about page</a> for <a href="/about#free_state_Horizontal_results">an example</a> and <a href="/about#horizontal_profile_method">further information</a>.
+<b>Optional (can be left blank)</b> The land surface temperature correction parameters enables the user to generate an additional profile that can evaluate variations in land surface temperature (e.g. due to climate change).<br> 
+&nbsp;&nbsp;&nbsp;&nbsp;For example specifying a land surface correction of 2 will add 2°C to the measured land surface temperature. The pre-existing geothermal gradient remains constant. For further details see the <a href="/about#free_state_Horizontal_results">example results</a> and  <a href="/about#horizontal_profile_method">further information</a>.
 </div>
 <p>
 {{form.climate.label}}<br>
-{{form.climate}}<br>
+{% for subfield in form.climate %}
+    <tr>
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label }}</td>
+    </tr>
+{% endfor %}
 </p>
 <p>
 {{form.land_correct.label}}<br>
 {{form.land_correct}}<br>
 </p>
 <p>
-<input type="submit" name="anything_submit" value="Submit" onclick="loading();">
+<input type="submit" name="anything_submit" value="Submit parameters" onclick="loading();">
 </p>
+</center>
 </form>
 </div>
 

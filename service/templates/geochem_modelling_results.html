@@ -1,6 +1,7 @@
 {% extends "base.html"%}
 
 {% block content %}
+<center><a href="/free_state"> <<  Results </a> <b>|   <a href="/about"> CONTENTS </a>   |</b> <a href="/reference_heading"> References >></a>  </center>
 
 <h3 id="geochemical_modelling_results">3.2 Geochemical modelling</h3>
 <div>
@@ -9,7 +10,9 @@ Typically as the temperature of the brine increases the volume of CO<sub>2</sub>
 For the geochemical modelling we present the predicted change in mineral volume (<a href="#geochem_results_figs">fig. 19</a>), volume (<a href="#geochem_results_figs">fig. 20</a>) and value (<a href="#geochem_results_figs">fig. 21</a>) of the storable CO<sub>2</sub> for all the samples from Texas. We used a reservoir lithology comprised of calcite (1 mole), dolomite (1 mole) and halite (1 mole). The dimensions of the theoretical reservoir of influence were 200m radius * 100m height * 0.15 saturated porosity.
 </div>
 
-<div class="row" id="geochem_results_figs">
+
+<div class="container">
+<div class="row justify-content-center" id="geochem_results_figs">
   <div class="column">
     <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/change_vol_pc.png" alt="change_volume" style="width:100%">
     <figcaption>Fig. 19 - Change in the mineral volume relative to the starting mineral volume.
@@ -26,9 +29,9 @@ For the geochemical modelling we present the predicted change in mineral volume 
     </figcaption>
   </div>
 </div>
+</div>
 
-
-<center><a href="/free_state"> <<  Results </a> <b>|   <a href="/about"> CONTENTS </a>   |</b> <a href="/reference_heading"> References >></a>  
+<center><a href="/free_state"> <<  Results </a> <b>|   <a href="/about"> CONTENTS </a>   |</b> <a href="/reference_heading"> References >></a>  </center>
 
 
 {% endblock %}

@@ -2,8 +2,7 @@
 
 {% block content %}
 
-<h2> Horizontal profile spatial options</h2>
-<form action="" method="post">
+<h2> Spatial options</h2>
 <p>
 The different spatial filters are;<br>
 </p>
@@ -13,9 +12,8 @@ The different spatial filters are;<br>
 <li><b>US county</b> - Choose a county(ies)</li>
 <li><b>Custom mapping</b> - Enter Lat/Lon bounding box for custom area</li>
 </ul>
-<p>
-Choose a spatial filter;
-</p>
+<center>
+<form action="" method="post">
 <p>
 {{form.mapping_select.label}}<br>
 {% for subfield in form.mapping_select %}
@@ -29,5 +27,5 @@ Choose a spatial filter;
 {{form.submit()}}
 </p>
 </form>
-
+</center>
 {% endblock %}

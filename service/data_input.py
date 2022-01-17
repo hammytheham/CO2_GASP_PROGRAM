@@ -6,10 +6,10 @@ class Download(FlaskForm):
 
 
 class Index_page(FlaskForm):
-    modelling_option_choices=['Option 1', 'Option 2']
-    modelling_option=RadioField(choices=modelling_option_choices)
+    modelling_option_choices=['Free state/Geothermal', 'Geochemical']
+    modelling_option=RadioField('Choose a modelling process;',choices=modelling_option_choices)
     submit=SubmitField('Submit parameters')
-
+#'Option 1', 'Option 2'
 
 class Data_input_geochem(FlaskForm):
     modelling_option_choices=['Option 1', 'Option 2']
@@ -23,11 +23,11 @@ class Data_input(FlaskForm):
     database_select=RadioField('Database Filter',choices=SelectDatabaseChoices)
     
     SelectField_choices=['Horizontal','Vertical']
-    co2_profile=RadioField('Choose a CO₂ Profile',choices=SelectField_choices)
+    co2_profile=RadioField('Choose a CO₂ Profile;',choices=SelectField_choices)
 
     #SelectMapping_choices=['co2_all_US_mapping','co2_state_mapping','co2_county_mapping','co2_custom_mapping']
     SelectMapping_choices=['All US','US state','US county','Custom mapping']
-    mapping_select=RadioField('Mapping Choices',choices=SelectMapping_choices)
+    mapping_select=RadioField('Please choose a spatial filter;',choices=SelectMapping_choices)
     
     us_state=['Alabama','Arizona','Arkansas','California','Colorado'
 ,'Connecticut','Delaware','Florida','Georgia','Idaho','Illinois','Indiana',
@@ -43,7 +43,7 @@ class Data_input(FlaskForm):
     
     co2_depth=StringField('Input a CO₂ target depth (m)')
 
-    land_correct=StringField('Landsurface correction')
+    land_correct=StringField('Land surface correction (°C)')
 
     min_vert_depth=StringField('Minimum vertical depth (m) -- y-axis minimum')
     

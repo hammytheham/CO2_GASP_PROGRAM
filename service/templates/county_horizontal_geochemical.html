@@ -2,16 +2,14 @@
 
 {% block content %}
 
-<h2> Geochemical modelling - County Level </h2>
+<h2> Geochemical modelling - County filter </h2>
 <form action="" method="post">
-<p>
-This filter performs geochemical modelling for fluids located in a/multiple county(ies). <br>
-First select the state in which the county(ies) reside. Then type in the county(ies) of interest, seperating multiple counties with a comma.<br>
-</p>
+<center>
 <p>
 {{form.US_state_select.label}}<br>
 {{form.US_state_select}}<br>
 </p>
+Type in the county(ies) of interest, seperating multiple counties with a comma.
 <p>
 {{form.US_county.label}}<br>
 {{form.US_county}}<br>
@@ -19,6 +17,7 @@ First select the state in which the county(ies) reside. Then type in the county(
 <p>
 {{form.submit()}}
 </p>
+</center>
 </form>
 
 {% endblock %}

@@ -3,21 +3,19 @@
 {% block content %}
 <h2> About CO<sub>2</sub>-GASP </h2>
 <div>
-Developer: <a href="https://twitter.com/hamish95">Hamish Robertson - h.alastair.r (at) gmail.com</a><br>
-Co-authors: <a href="https://research-information.bris.ac.uk/en/persons/fiona-f-whitaker"> Fiona Whitaker (Uni. Bristol)</a>
-</div><br>
+Developer: <a href="https://twitter.com/hamish95">Hamish Robertson - h.alastair.r (at) gmail.com</a>
+<br>Most of core methodology is covered in Robertson et al. (2022). The CO2-sequestration modelling with PHREEQC has not been peer-reviewed. If you want a custom PHREEQC simulation running feel free to drop me a message (or clone and modify the code...always happy to engage and respond to queries). All website code is hosted on <a href="https://github.com/hammytheham/CO2_GASP_PROGRAM">GitHub</a>.<br>
+  
+Robertson, H., Whitaker, F., Hollis, C. and Corlett, H., 2022. <a href="https://eartharxiv.org/repository/view/2315/">Solubulity product constants for natural dolomite (0-200°C) through a groundwater-based approach using the USGS produced water database</a>. Code hosted at <a href="https://github.com/hammytheham/AJS_Robertson_2022">AJS paper GitHub</a>.
+  
+<br><br>Thank you to Woodside Energy, Wintershall Dea and Tullow Oil for funding. Also thank you to AWS for the sustainability cloud credits.
 
-<h3> Abreviations </h3>
-The following are abreviations to describe the three different datasets that underpin this study. 
-<ul>
-    <li><b>PWGD</b> - the USGS Produced Water database (Blondes et al., 2016) </li>
-    <li><b>SMUH</b> - geothermal gradient data derived from the Southern Methodist University Heatflow database (Blackwell et al., 2011) </li>
-    <li><b>MODIS</b> - MODIS satellite derived land surface temperatures (Bechtel, 2015) </li>
-</ul><br>
+</div><br>
 
 <center><div id="toc_container">
 <p class="toc_title">Contents</p>
 <ul class="toc_list">
+  <li><a href="/about#summary">i Summary & Abreviations</a></li>
   <li><a href="/Introduction_header">1 Introduction</a></li>
   <li><a href="/Methodology_heading">2 Methodology </a>
   <ul>
@@ -30,7 +28,7 @@ The following are abreviations to describe the three different datasets that und
       </ul>
       <li><a href="/Heatflow_data">2.1.3 Geothermal gradient data</a></li>
       <li><a href="/MODIS_data">2.1.4 Land surface temperature data</a></li>
-      <li><a href="/Robertson_et_al">2.1.5 Robertson et al. (2021)</a></li>
+      <li><a href="/Robertson_et_al">2.1.5 Robertson et al. (2022)</a></li>
       <ul>
         <li><a href="/Robertson_et_al#groundtruth_robertson_2021">2.1.5.1 Groundtruthing</a></li>
       </ul>
@@ -61,7 +59,83 @@ The following are abreviations to describe the three different datasets that und
   <li><a href="/reference_heading">4 References</a></li>
 </ul>
 </div>
+</center>
 
-<center><a href="/Introduction_header"> Introduction >></a> 
+<center><a href="/Introduction_header"> Introduction >></a></center>
+
+<h2 id="summary"> Abreviations </h3>
+The following are abreviations to describe the three different datasets that underpin this study. 
+<ul>
+    <li><b>PWGD</b> - the USGS Produced Water database (Blondes et al., 2016) </li>
+    <li><b>SMUH</b> - geothermal gradient data derived from the Southern Methodist University Heatflow database (Blackwell et al., 2011) </li>
+    <li><b>MODIS</b> - MODIS satellite derived land surface temperatures (Bechtel, 2015) </li>
+</ul>
+
+<h2 id="sumsummary"> Summary </h2>
+
+Below is a top level summary of the results of both the geothermal/free state CO<sub>2</sub> and geochemical modelling options.
+
+<h3 id="geothermal_free_state"> Geothermal and free state CO<sub>2</sub> </h3>
+
+For selected areas and variations in subsurface-depth this modelling option enables a user to generate maps and graphs of;
+<ul>
+<li>CO<sub>2</sub> density (<a href="#Texas_700m_density">fig. A</a>)</li>
+<li>CO<sub>2</sub> state (e.g. gas, liquid or supercritical) (<a href="#Texas_700m_density">fig. B</a>)</li>
+<li>Temperature at formation depth (see <a href="/Results_heading#Texas_700m_temperature">here</a>) </li>
+<li>Rasters of underlying MODIS landsurface temperature and SMUH geothermal gradient data (see <a href="/Results_heading#Texas_geothermal_grad_MODIS_temp">here</a>)</li>
+</ul>
+</div>
+
+For further details see information about the input datasets (<a href="/Heatflow_data">geothermal gradient data</a> and <a href="/MODIS_data">surface temperature data</a>), the <a href="/free_state">method</a> and <a href="/Results_heading#free_state_results">example results</a>.
+
+<div class="container">
+<div class="row justify-content-center" id="Texas_700m_density">
+  <div class="column">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/co2_density_with_lee_png.png" alt="co2_density_with_lee" style="width:100%">
+  <figcaption>Fig. A - CO<sub>2</sub> density at 700m depth for Texas. See the <a href="/free_state">method</a> and <a href="/Results_heading#free_state_Horizontal_results">results</a> for further details.
+  </figcaption>
+  </div>
+  <div class="column">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/co2_state_texas_no_correct.png" alt="Texas_700m_state" style="width:100%">
+  <figcaption>Fig. B - CO<sub>2</sub> state at 700m depth for Texas. See the <a href="/free_state">method</a> and <a href="/Results_heading#free_state_Horizontal_results">results</a> for further details.
+  </div>
+</div>
+</div>
+
+<h3 id="geochem_model"> Geochemical modelling</h3>
+
+<div>
+For selected areas this geochemical modelling (PHREEQC-Pitzer) evaluates the interaction between injected CO<sub>2</sub>, the formation waters and the local mineralogy. The modelling drives each individual water to a temperature and pressure estimated to represent the conditions at the depth from which it was sampled (the at-formation depth).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The user supplies a mineralogical composition that is thought to represent a formation of interest. Each water, now at-formation depth conditions, is initially equilibriated with the lithology to correct any discrepancy in the initial water chemistry. Thereafter in a second stage, CO<sub>2</sub> is injected up to a pressure equal to the at-formation depth conditions. The data from this stage is the primary data that is reported and used in further calculations.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Using the simulation data the user is given an option to calculate the volume, and for a given price per tonne ($70 per tonne) the value, of CO<sub>2</sub> that could be stored in a hypothetical water-satured cylinder of a given porosity. This cylinder represents a volume of rock surrounding the injection well in which the water in pore spaces saturates with CO<sub>2</sub> with thhe solubility of CO<sub>2</sub> determined by the earlier modelling.
+
+<ul>
+<li>The calculated solubility of CO<sub>2</sub> in the produced water phase. This data is then extrapolated to the theoretical water saturated cylinder (figs. <a href="#co2_storage_calcs">C</a> & <a href="#co2_storage_calcs">D</a>). </li>
+<li>The change in mineralogy and other key PHREEQC simulation data for each simulation. </li>
+<li>The change in porosity. Specifically the difference between the initial mineral volume and the final mineral volumes is calculated. CO<sub>2</sub> injection typically lowers the pH driving dissolution and/or precipitation of different minerals. </li>
+</ul>
+
+For further details see information about the input datasets (<a href="/USGS_Produced_Water_Database">produced water database</a>, <a href="/Heatflow_data">geothermal gradient data</a> and <a href="/MODIS_data">surface temperature data</a>), the <a href="/geochemical_modelling">method</a> and <a href="/geochemical_modelling_results">example results</a>.
+</div>
+
+<div class="container">
+<div class="row justify-content-center" id="co2_storage_calcs">
+  <div class="column">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/volume_of_storable_co2.png" alt="volume_of_storable_co2" style="width:100%">
+  <figcaption>Fig. C - For all water samples in Texas, the volume (million tonnes) of the storable CO<sub>2</sub> in the theoretical water saturated (15%) reservoir (200m radius x 100m height). Reservoir lithology is carbonate (calcite/dolomite/halite). See the <a href="/geochemical_modelling">method</a> and <a href="/geochemical_modelling_results">results</a> for further details.
+  </figcaption>
+  </div>
+  <div class="column">
+  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/value_of_storable_co2.png" alt="Texas_700m_state" style="width:100%">
+  <figcaption>Fig. D - For all water samples in Texas, the value (million dollars based on $70 per tonne of CO<sub>2</sub>) of the storable CO<sub>2</sub> in the theoretical water saturated (15%) cylinder (200m radius x 100m height). See the <a href="/geochemical_modelling">method</a> and <a href="/geochemical_modelling_results">results</a> for further details.
+  </figcaption>
+  </div>
+</div>
+</div>
+
+<center><a href="/Introduction_header"> Introduction >></a></center>
+
+
+
 
 {% endblock %}
