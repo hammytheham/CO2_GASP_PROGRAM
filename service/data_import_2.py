@@ -134,119 +134,7 @@ def data_processing2_all_samples(usgs):
 	return usgs1
 
 
-def data_processing2(usgs):
-	""" Filter the USGS database to a set of geochemical quality control parameters defined
-	in the text document. USER - THIS IS WHERE YOU EDIT FILTERING CRITERIA!
-	The data is also rounded to the nearest 0.1 lat/lon
-	incoming-usgs
-	outgoing-usgs1
-	"""
-	#Cull breakdown for stats
-	print('len of original usgs datafram',len(usgs))
-	ph=usgs[(usgs.PH >= 3.5 ) & (usgs.PH <= 11 )]
-	print('pH fail',100-((len(ph)/len(usgs))*100))
-	chargebalance=usgs[(usgs.chargebalance >= -15.0 ) & (usgs.chargebalance <= 15.0 )]
-	print('chargebalance',100-((len(chargebalance)/len(usgs))*100))
-	mg=usgs[(usgs.Mg > 0.0 ) & (usgs.Ca > 0.0 )]
-	print('mg fail',100-((len(mg)/len(usgs))*100))
-	depth=usgs[(usgs.Depth > 0.0)]
-	print('depth fail',100-((len(depth)/len(usgs))*100))
-	lat=usgs[(usgs.Lat > 0.0) & (usgs.Lon < 0.0)]
-	print('lat fail',100-((len(lat)/len(usgs))*100))
-	lith=usgs.loc[~(pd.isnull(usgs.LITHOLOGY))] #not ~ null lithology
-	lith = lith[lith.LITHOLOGY != 'Anhydrite']                    #CULLED
-	lith.loc[lith.LITHOLOGY == 'Anhydrite and dolomite','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Chert, Dolomite, Other','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Chert, Dolomite, Sandstone','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Dolomite','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Dolomite, Limestone','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Dolomite, Limestone, Sandstone, Shale','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Dolomite, Limestone, Shale','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Dolomite, Sandstone','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Dolomite, Sandstone, Shale','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Dolomite, Shale','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Dolomite, Siltstone','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Sandstone','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Sandstone, Shale','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Sandstone, Siltstone','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Anhydrite, Shale','LITHOLOGY'] = 'Shale'
-	lith.loc[lith.LITHOLOGY == 'Carbonate','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Carbonate, Sandstone, Shale, Siltstone','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Carbonate, Sandstone, Shale, Siltstone, Other','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Chalk','LITHOLOGY'] = 'Limestone'
-	lith = lith[lith.LITHOLOGY != 'Chat']                         #CULLED
-	lith = lith[lith.LITHOLOGY != 'Chert']                         #CULLED
-	lith.loc[lith.LITHOLOGY == 'Chert, Dolomite','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Chert, Dolomite, Limestone','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Chert, Dolomite, Limestone, Sandstone, Shale','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Chert, Dolomite, Sandstone','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Chert, Dolomite, Sandstone, Shale','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Chert, Dolomite, Shale','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Chert, Limestone','LITHOLOGY'] = 'Limestone'
-	lith.loc[lith.LITHOLOGY == 'Chert, Sandstone','LITHOLOGY'] = 'Sandstone'
-	lith = lith[lith.LITHOLOGY != 'Coal']                         #CULLED
-	lith = lith[lith.LITHOLOGY != 'Conglomerate']                 #CULLED
-	lith.loc[lith.LITHOLOGY == 'Dolomite & Lime','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Dolomite - Lime','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Limestone','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Limestone, Sandstone','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Limestone, Sandstone, Shale','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Limestone, Sandstone, Shale, Siltstone','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Limestone, Sandstone, Siltstone','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Limestone, Shale','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Sandstone','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Sandstone, Shale','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Sandstone, Siltstone','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Shale','LITHOLOGY'] = 'Dolomite'
-	lith.loc[lith.LITHOLOGY == 'Dolomite, Siltstone','LITHOLOGY'] = 'Dolomite'
-	lith = lith[lith.LITHOLOGY != 'Ga1g']                         #CULLED
-	lith = lith[lith.LITHOLOGY != 'Ga1n']                         #CULLED
-	lith = lith[lith.LITHOLOGY != 'Ga1r']                         #CULLED
-	lith.loc[lith.LITHOLOGY == 'Limestone & Dol','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Limestone & San','LITHOLOGY'] = 'Limestone'
-	lith.loc[lith.LITHOLOGY == 'Limestone & Sha','LITHOLOGY'] = 'Limestone'
-	lith.loc[lith.LITHOLOGY == 'Limestone - Dol','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Limestone Dolom','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith.loc[lith.LITHOLOGY == 'Limestone, Sandstone','LITHOLOGY'] = 'Limestone'
-	lith.loc[lith.LITHOLOGY == 'Limestone, Sandstone, Shale','LITHOLOGY'] = 'Limestone'
-	lith.loc[lith.LITHOLOGY == 'Limestone, Sandstone, Shale, Siltstone','LITHOLOGY'] = 'Limestone'
-	lith.loc[lith.LITHOLOGY == 'Limestone, Sandstone, Siltstone','LITHOLOGY'] = 'Limestone'
-	lith.loc[lith.LITHOLOGY == 'Limestone, Shale','LITHOLOGY'] = 'Limestone'
-	lith.loc[lith.LITHOLOGY == 'Limestone; Dolostone','LITHOLOGY'] = 'Mixed_Carbonate'
-	lith = lith[lith.LITHOLOGY != 'Other']                        #CULLED
-	lith.loc[lith.LITHOLOGY == 'Sand','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Sand Stone','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Sandstone, Other','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Sandstone, Shale','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Sandstone, Shale, Other','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Sandstone, Shale, Siltstone','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Sandstone, Shale, Siltstone, Other','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Sandstone, Siltstone','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Sandstone, Siltstone, Other','LITHOLOGY'] = 'Sandstone'
-	lith.loc[lith.LITHOLOGY == 'Shale, Other','LITHOLOGY'] = 'Shale'
-	lith.loc[lith.LITHOLOGY == 'Shale, Siltstone','LITHOLOGY'] = 'Shale'
-	lith.loc[lith.LITHOLOGY == 'Siltstone','LITHOLOGY'] = 'Shale'
-	lith = lith[lith.LITHOLOGY != 'Unknown']
-	print('lith fail',100-((len(lith)/len(usgs))*100))
-	#Sequential cull
-	print('lith=',len(lith))
-	lith=lith[(lith.PH >= 3.5 ) & (lith.PH <= 11 )]
-	print('lith ph=',len(lith))
-	lith=lith[(lith.chargebalance >= -15.0 ) & (lith.chargebalance <= 15.0 )]
-	print('lith chargebalance=',len(lith))
-	lith=lith[(lith.Mg > 0.0 ) & (lith.Ca > 0.0 )]
-	print('lith non-zero Mg Ca=',len(lith))
-	lith=lith[(lith.Depth > 0.0)]
-	print('lith depth=',len(lith))
-	lith=lith[(lith.Lat > 0.0) & (lith.Lon < 0.0)]
-	print('lith lat-lon=',len(lith))
-	lith=lith.loc[~(pd.isnull(lith.LITHOLOGY))] #not ~ null lithology
-	print('lith lithology=',len(lith))
-	lith=lith.round({'Lat':1,'Lon':1})
-	print("percent remaining", len(lith), 1 - len(lith)/165960 )
-	usgs1=lith.copy()
-	print('usgs1=',len(usgs1))
-	return usgs1
+
 
 
 def data_processing6(usgs1,sur,grad):
@@ -328,7 +216,6 @@ def data_processing6(usgs1,sur,grad):
 
 def main(rawusgs,grad,sur):
 	usgs=data_processing1(rawusgs) # 1 - turn on for full function
-	#usgs1=data_processing2(usgs)
 	usgs1=data_processing2_all_samples(usgs) #2 - turn on for full function
 	medusgs=data_processing6(usgs1,sur,grad) # 3 - turn on for full function
 	return medusgs
