@@ -2,6 +2,8 @@ import os
 directory=os.getcwd()+'/'
 co2_results='../temp_files/OUTPUT_DATA/co2_results'
 geochemical_result='../temp_files/OUTPUT_DATA/geochemical_result'
+dolomite_result='../temp_files/OUTPUT_DATA/dolomite_result'
+
 #directory=''
 output_data='../temp_files/OUTPUT_DATA'
 us_land='../INPUT_DATA/SHAPE_DATA/USA_adm'
