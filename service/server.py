@@ -77,10 +77,10 @@ pitzer_mineral_map= {'Akermanite (Ca2MgSi2O7)': 'Akermanite','Anhydrite (CaSO4)'
 mineral_keys=['mineral_select_1','mineral_select_2','mineral_select_3','mineral_select_4']
 #,'mineral_select_5','mineral_select_6','mineral_select_7','mineral_select_8','mineral_select_9','mineral_select_10',
 #'mineral_select_11']
-moles_keys=['volume_1','volume_2','volume_3','volume_4']
+volume_keys=['volume_1','volume_2','volume_3','volume_4']
 #,'moles_5','moles_6','moles_7','moles_8','moles_9','moles_10','moles_11']
 
-volume_keys=['moles_1','moles_2','moles_3','moles_4']
+moles_keys=['moles_1','moles_2','moles_3','moles_4']
 #,'moles_5','moles_6','moles_7','moles_8','moles_9','moles_10','moles_11']
 
 
@@ -197,11 +197,6 @@ def serve_12():
 @app.route('/reference_heading')
 def serve_13():
     return render_template('references.html')
-
-
-
-
-
 
 
 @app.route('/sim1',methods=['GET','POST'])

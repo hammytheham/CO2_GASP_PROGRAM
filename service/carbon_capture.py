@@ -12,8 +12,6 @@ import subprocess
 
 from file_paths import geochemical_result, directory, output_data
 
-
-
 def main(rawusgs, grad, sur,user_job,geochem_minerals,geochem_minerals_secondary,area,co2_US_state,co2_US_county,co2_lon_lat,radius,height,porosity,session,result):
     """Script for calculating and plotting equilibrium constant for dolomite"""
     #eq_constants_value=True #usuall
