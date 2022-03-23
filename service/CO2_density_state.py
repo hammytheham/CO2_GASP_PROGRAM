@@ -78,7 +78,7 @@ def f2(x,temp,pres):
 
 def read_shape_all_US():
 	crs = {'init': 'epsg:4269'} #http://www.spatialreference.org/ref/epsg/2263/
-	boundary_us = gpd.read_file('s3://co-2-gasp-bucket/'+us_land+'/USA_adm0.shp',crs=crs)
+	boundary_us = gpd.read_file(us_land+'/USA_adm0.shp',crs=crs)
 	exploded=boundary_us.loc[boundary_us['NAME_0']=='United States'].explode()
 	box=[(-128.600464,24.374619),(-128.600464,50.406767),(-60.748901,50.406767),(-60.748901,24.374619)]
 	poly = Polygon(box)

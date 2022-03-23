@@ -2,7 +2,6 @@ import json
 import os
 import numpy as np
 import pandas as pd
-import pygeos
 import sys
 import CO2_density_state
 import geopandas as gpd
@@ -12,51 +11,29 @@ from geopandas.tools import sjoin
 
 from file_paths import s3_geochem_result, geochemical_input
 
-
-
 def data_processing1(user_data):
 	"""Create a mean of the depth between the upper and lower peforations (ingnoring NaN
 	values). Concert to km. Append to database. Rename columns. Make a permant copy to new
 	dataframe USGS
-	incoming - rawusgs(old variable name)/user_data
-	outgoing - formated data
-	Also primary script for the user submitted data - hence modifications.
-	Modification - check whether DepthKM etc exist before running code.
-	
+	incoming - rawusgs
+	outgoing - formated USGS
 	"""
-	print(user_data[['DepthKM','DepthFT','DEPTHUPPER']])
-	nan_ft=list(user_data[user_data['DepthFT'].notna()].index)
-	for i in nan_ft:
-		user_data['DepthKM'][i]=user_data['DepthFT'][i] * 0.0003048
-		
-	nan_up=list(user_data[user_data['DEPTHUPPER'].notna()].index)
-	for i in nan_up:
-		user_data['DepthKM'][i]=(user_data[['DEPTHUPPER', 'DEPTHLOWER']][i].mean(axis=1))* 0.0003048
-	print(user_data['DepthKM'])
+	if user_data['DepthKM'].empty == True:
+		if user_data['DepthFT'].empty == False:
+			user_data['Depth']=  user_data['DepthFT'] * 0.0003048
+		if user_data['DepthUpper'].empty == False:
+			user_data['Depth']=user_data[['DEPTHUPPER', 'DEPTHLOWER']].mean(axis=1)
+			user_data.Depth = user_data.Depth * 0.0003048 # Convert ft to km (km in smuh database)
+	print(user_data.head(20))
 
-	#if user_data['DepthKM'].empty == True:
-	#	if user_data['DepthFT'].empty == False:
-	#		user_data['DepthKM'] =  user_data['DepthFT'] * 0.0003048
-	#	if user_data['DEPTHUPPER'].empty == False:
-	#		user_data['DepthFT']=user_data[['DEPTHUPPER', 'DEPTHLOWER']].mean(axis=1)
-	#		user_data.Depth = user_data.DepthFT * 0.0003048 # Convert ft to km (km in smuh database)
-	#print(user_data['DepthKM'])
 	user_data = user_data.rename(columns={'LATITUDE': 'Lat', 'LONGITUDE': 'Lon'})
 	user_data['Lat_OLD']=user_data['Lat']
 	user_data['Lon_OLD']=user_data['Lon']
 	print('user_data=',len(user_data))
+	sys.exit()
 	return user_data
-	
-	#rawusgs['Depth']=rawusgs[['DEPTHUPPER', 'DEPTHLOWER']].mean(axis=1)
-	#rawusgs.Depth = rawusgs.Depth * 0.0003048 # Convert ft to km (km in smuh database)
-	#rawusgs = rawusgs.rename(columns={'LATITUDE': 'Lat', 'LONGITUDE': 'Lon'})
-	#rawusgs['Lat_OLD']=rawusgs['Lat']
-	#rawusgs['Lon_OLD']=rawusgs['Lon']
-	#usgs=rawusgs.copy()
-	#print('usgs=',len(usgs))
-	#return usgs
 
-def data_processing2_all_samples(usgs):
+def data_processing2_all_samples(user_data):
 	""" Filter the USGS database to a set of geochemical quality control parameters defined
 	in the text document. USER - THIS IS WHERE YOU EDIT FILTERING CRITERIA!
 	The data is also rounded to the nearest 0.1 lat/lon
@@ -64,18 +41,18 @@ def data_processing2_all_samples(usgs):
 	outgoing-usgs1
 	"""
 	#Cull breakdown for stats
-	print('len of original usgs datafram',len(usgs))
-	ph=usgs[(usgs.PH >= 3.5 ) & (usgs.PH <= 11 )]
-	print('pH fail',100-((len(ph)/len(usgs))*100))
-	chargebalance=usgs[(usgs.chargebalance >= -15.0 ) & (usgs.chargebalance <= 15.0 )]
-	print('chargebalance',100-((len(chargebalance)/len(usgs))*100))
-	mg=usgs[(usgs.Mg > 0.0 ) & (usgs.Ca > 0.0 )]
-	print('mg fail',100-((len(mg)/len(usgs))*100))
-	depth=usgs[(usgs.Depth > 0.0)]
-	print('depth fail',100-((len(depth)/len(usgs))*100))
-	lat=usgs[(usgs.Lat > 0.0) & (usgs.Lon < 0.0)]
-	print('lat fail',100-((len(lat)/len(usgs))*100))
-	lith=usgs
+	print('len of original user_data datafram',len(user_data))
+	ph=user_data[(user_data.PH >= 3.5 ) & (user_data.PH <= 11 )]
+	print('pH fail',100-((len(ph)/len(user_data))*100))
+	chargebalance=user_data[(user_data.chargebalance >= -15.0 ) & (user_data.chargebalance <= 15.0 )]
+	print('chargebalance',100-((len(chargebalance)/len(user_data))*100))
+	mg=user_data[(user_data.Mg > 0.0 ) & (user_data.Ca > 0.0 )]
+	print('mg fail',100-((len(mg)/len(user_data))*100))
+	depth=user_data[(user_data.Depth > 0.0)]
+	print('depth fail',100-((len(depth)/len(user_data))*100))
+	lat=user_data[(user_data.Lat > 0.0) & (user_data.Lon < 0.0)]
+	print('lat fail',100-((len(lat)/len(user_data))*100))
+	lith=user_data
 	lith.loc[lith.LITHOLOGY == 'Anhydrite and dolomite','LITHOLOGY'] = 'Dolomite'
 	lith.loc[lith.LITHOLOGY == 'Anhydrite, Chert, Dolomite, Other','LITHOLOGY'] = 'Dolomite'
 	lith.loc[lith.LITHOLOGY == 'Anhydrite, Chert, Dolomite, Sandstone','LITHOLOGY'] = 'Dolomite'
@@ -156,15 +133,11 @@ def data_processing2_all_samples(usgs):
 	print('lith lithology=',len(lith))
 	lith=lith.round({'Lat':1,'Lon':1})
 	print("percent remaining", len(lith), 1 - len(lith)/165960 )
-	usgs1=lith.copy()
-	print('usgs1=',len(usgs1))
-	return usgs1
+	user_data_1=lith.copy()
+	print('user_data_1=',len(user_data_1))
+	return user_data_1
 
-
-
-
-
-def data_processing6(usgs1,sur,grad):
+def data_processing6(user_data_1,sur,grad):
 	"""Merge the dataframes into a single dataframe called medusgs
 	currently the field mapping section is working but generating inaccurate results relativel yot the original codes so
 	is unused at present
@@ -246,9 +219,6 @@ def intersecting_points(grad_sur,sub_explo):
 	geometry=[Point(xy) for xy in zip(grad_sur.Lon_OLD, grad_sur.Lat_OLD)]
 	crs = {'init': 'epsg:4269'} #http://www.spatialreference.org/ref/epsg/2263/
 	grad_sur = gpd.GeoDataFrame(grad_sur, crs=crs, geometry=geometry)
-	sub_explo.to_crs(crs=crs,inplace=True)
-	print(sub_explo.crs)
-	print(grad_sur.crs)
 	pointsinPolys_intersects=sjoin(grad_sur,sub_explo,how="left")
 	grouped = pointsinPolys_intersects[pointsinPolys_intersects['index_right'].notna()]
 	grouped.reset_index(inplace=True)
@@ -284,15 +254,12 @@ def main(rawusgs,grad,sur,area,co2_US_county,co2_US_state,co2_lon_lat):
 	medusgs_new=location_select(medusgs,area,co2_US_county,co2_US_state,co2_lon_lat)
 	return medusgs_new
 
-
-def main_user_supply(user_data,grad,sur,area,co2_US_county,co2_US_state,co2_lon_lat):
+def main_user_supply(rawusgs,grad,sur):
 	'''For user supplied data'''
-	usgs=data_processing1(user_data)
-	print(user_data.head(10))
-	
-	#usgs1=data_processing2_all_samples(usgs) 
-	#medusgs=data_processing6(usgs1,sur,grad)
-	#medusgs_new=location_select(medusgs,area,co2_US_county,co2_US_state,co2_lon_lat)
+	usgs=data_processing1(rawusgs) 
+	usgs1=data_processing2_all_samples(usgs) 
+	medusgs=data_processing6(usgs1,sur,grad)
+	medusgs_new=location_select(medusgs,area,co2_US_county,co2_US_state,co2_lon_lat)
 	return medusgs_new
 	
 if __name__ == "__main__":

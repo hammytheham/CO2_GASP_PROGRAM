@@ -1,0 +1,30 @@
+{% extends "base.html"%}
+
+{% block content %}
+<div>
+This service allows users to run the R mixed modelling simulation to determine the local dolomite solubility constant (see Robertson et al. 2022). The user has the option to either upload a CSV file (download a correctly formatted sample <a href="">here</a> which uses a tab seperator) or use the default PWGD database (the results of which are found <a href="">here</a>). Uploading a CSV file results in a merge of the dataframes prior to running the mixed model; this enables the user to calculate a local dolomite solubility constant with an advantage of being able to use the sizeable USGS database as the 'reference data' which increases accuracy and relatibility.<br>
+<div>
+<center>
+<form method="post" enctype="multipart/form-data">
+{{form.US_DATA.label}}<br>
+{% for subfield in form.US_DATA %}
+    <tr>
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label }}</td>
+    </tr><br>
+{% endfor %}<br>
+{{form.NEW_TEMP.label}}<br>
+{% for subfield in form.NEW_TEMP %}
+    <tr>
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label }}</td>
+    </tr><br>
+{% endfor %}<br>
+{{form.user_file()}}<br><br><br>
+{{form.submit()}}
+</form>
+</center>
+</div>
+
+
+{% endblock %}

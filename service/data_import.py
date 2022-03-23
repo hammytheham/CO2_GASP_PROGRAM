@@ -20,6 +20,10 @@ def boto3_download_results(file):
     print(url)
     return url
 
+def boto3_upload_csv(file):
+    url=boto3.client('s3').put_object(Bucket='co-2-gasp-bucket',
+    Key=file)
+
 
 def read_in_data():
     """ Read in different datafiles

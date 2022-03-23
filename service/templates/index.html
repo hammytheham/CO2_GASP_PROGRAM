@@ -3,36 +3,15 @@
 {% block content %}
 <div>
 <br>
-CO2-GASP enables users to model (PHREEQC & CO<sub>2</sub> equation-of-state) groundwater and geothermal data for the USA. See the <a href="/about">about</a> page for a more detailed description of the methodology/outputs including a high level <a href="/about#summary">summary</a> of the two options below. <br> <br>
-You have the option of either modelling geothermal and free state CO<sub>2</sub> data (<a href="#Texas_700m_density">fig. A</a>) or geochemical modelling (<a href="#Texas_700m_density">fig. B</a>).<br>  
-</div>
-<center>
-<form action="" method="post">
-{{form.modelling_option.label}}<br>
-{% for subfield in form.modelling_option %}
-    <tr>
-        <td>{{ subfield }}</td>
-        <td>{{ subfield.label }}</td>
-    </tr>
-{% endfor %}
-<p>
-{{form.submit()}}
-</p>
-</form>
-</center>
-<div class="container">
-<div class="row justify-content-center" id="Texas_700m_density">
-  <div class="col">
-  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/co2_density_with_lee_png.png" alt="co2_density_with_lee" style="width:80%">
-  <figcaption>Fig. A - <b>Free state/Geothermal</b> - CO<sub>2</sub> density at 700m depth for Texas. See the <a href="/free_state">method</a> and <a href="/Results_heading#free_state_Horizontal_results">results</a> for further details.
-  </figcaption>
-  </div>
-  <div class="col">
-  <img src="https://co-2-gasp-bucket.s3.us-east-2.amazonaws.com/images/value_of_storable_co2.png" alt="Texas_700m_state" style="width:70%">
-  <figcaption>Fig. B - <b>Geochemical</b> - For all water samples in Texas, the value (million dollars based on $70 per tonne of CO<sub>2</sub>) of the storable CO<sub>2</sub> in the theoretical water saturated (15%) cylinder (200m radius x 100m height). See the <a href="/geochemical_modelling">method</a> and <a href="/geochemical_modelling_results">results</a> for further details.
-  </figcaption>
-  </div>
-</div>
+This website hosts a number of different webapps that are largely based on the estimation of at-formation depth temperatures for each sample in the US produced water database (see the <a href="/about">about</a> page for a more detailed description of the methodology).
+<br>
+<br>
+<a href='/index_co2_modelling'>CO2-GASP</a> - Model CO2 sequestration (free state and dissolved) and access underlying geothermal and water chemistry/temperature data.<br>
+<br>
+<a href='/dolomite_constant'>Dolomite-R</a> - Statistically derive local thermodynamic constants for dolomite using a mixed modelling approach (uses R). This program includes the ability to upload water chemistry data for inclusion into the model.<br><br>
+<a href='/other_phreeqc_sims'>Experimental PHREEQC sims</a> - We have developed a number of scripts that allow users to simulate other processes that may be of interest including lithium (carbonate) production. 
+
+<br> All programs have undergone very limited user testing (thanks mom!). Please contact Hamish with any problems or queries - h.alastair.r at gmail.com.
 </div>
 
 

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, RadioField
+from wtforms import StringField, SubmitField, SelectField, RadioField, FileField
 
 class Download(FlaskForm):
     submit=SubmitField('Download files')
@@ -10,6 +10,14 @@ class Index_page(FlaskForm):
     modelling_option=RadioField('Choose a modelling process;',choices=modelling_option_choices)
     submit=SubmitField('Submit parameters')
 #'Option 1', 'Option 2'
+
+class Constant_page(FlaskForm):
+    modelling_option_choices_1=['US data', 'Non-US data']
+    US_DATA=RadioField('Is data from the US?',choices=modelling_option_choices_1)
+    modelling_option_choices_2=['Use estimated at-formation-depth temperature', 'Use temperature data from input data']
+    NEW_TEMP=RadioField('For the statistical model which formation water temperature should be used? (US ONLY)',choices=modelling_option_choices_2)
+    user_file=FileField()
+    submit=SubmitField('Submit parameters')
 
 class Data_input_geochem(FlaskForm):
     modelling_option_choices=['Option 1', 'Option 2']

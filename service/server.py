@@ -1,14 +1,15 @@
 from flask import Flask, render_template, redirect, request, url_for, session
 import boto3
 from config import S3_KEY, S3_SECRET, S3_BUCKET
-from data_input import Data_input,Data_input_geochem, Index_page, Download,PhreeqcOptions,volume_to_mole
+from data_input import Data_input,Data_input_geochem, Index_page,Constant_page, Index_page, Download,PhreeqcOptions,volume_to_mole
 import sys
-from data_import import boto3_download_results
+from data_import import boto3_download_results, boto3_upload_csv
 #Geochemical code
 import data_import
 import data_import_2
 from carbon_capture import main as carbon_capture_MAIN
 from CO2_density_state import main as CO2_density_state_MAIN
+from dolomite_constant import main as dolomite_constant_MAIN
 from co2_gasp_run_options import *     #import the option file from within the same folder
 from redis import Redis
 from rq import Queue
@@ -22,6 +23,8 @@ from simple_job import main as simple_Main
 from file_paths import co2_results, geochemical_result, directory
 import pandas as pd
 import numpy as np
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=S3_SECRET
@@ -32,8 +35,40 @@ app.config['EXPLAIN_TEMPLATE_LOADING'] = True
 
 q = Queue(connection=conn)
 
-@app.route('/',methods=['GET','POST'])
+@app.route('/')
 def home():
+    return render_template("index.html")
+
+@app.route('/dolomite_constant',methods=['GET','POST'])
+def home_constant():
+    data=Constant_page()
+    if request.method == 'POST':
+        result=request.form.to_dict()
+        print(result)
+        #print(data.user_file)        print(request.files)
+        file_to_upload = request.files['user_file']
+        filename=secure_filename(file_to_upload.filename)
+        boto3_upload_csv('temp/INPUT_DATA/input_water_chem_data/'+filename)
+        user_data=pd.read_csv(file_to_upload,sep='\t')
+        print(user_data.head(10))
+        user_job=str(randint(10000000, 99999999))
+        session['user_job']=user_job
+        job = q.enqueue(dolomite_constant_MAIN, args=(rawusgs, grad, sur,user_data,result['US_DATA'], result['NEW_TEMP'], user_job),job_timeout=50000) #)# )
+        session['job_id']=job.id
+    return render_template("/index_dolomite_constant.html",form=data)
+
+    #    url=boto3_download_results('temp/OUTPUT_DATA/co2_results/'+'co2_results_'+session['user_job']+'.zip')
+#
+    #    
+    #s3://co-2-gasp-bucket/temp/INPUT_DATA/input_water_chem_data/
+
+    #if data.is_submitted():
+    #    result=request.form.to_dict()
+    #    print(result)
+    
+
+@app.route('/index_co2_modelling',methods=['GET','POST'])
+def home_co2():
     data=Index_page()
     if data.is_submitted():
         result=request.form.to_dict()
@@ -44,7 +79,7 @@ def home():
         if result['modelling_option']=='Geochemical':
             session['modelling_option']='geochemical'
             return redirect('/horizontal')
-    return render_template("index.html",form=data)
+    return render_template("index_co2_modelling.html",form=data)
 
 
 pitzer_mineral_map= {'Akermanite (Ca2MgSi2O7)': 'Akermanite','Anhydrite (CaSO4)': 'Anhydrite',
