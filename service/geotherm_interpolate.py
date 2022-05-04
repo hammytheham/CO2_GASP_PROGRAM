@@ -19,8 +19,6 @@ from file_paths import s3_geotherm_result,directory
 Note have changed the INPUT_DATA/geochemical_result_files type locations (old), was data_import.geotherm_result etc, to S3 locations. Script hasnt been run yet
 """
 
-
-
 def read_geotherm(geo):
     #read heatflow csv. IntervalCorrectedGradient is the geothermal gradient
     geo=geo[(geo.IntervalCorrectedGradient >= 0) & (geo.IntervalCorrectedGradient <= 200)]

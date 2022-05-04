@@ -30,10 +30,13 @@ def main(rawusgs, grad, sur,user_data,US_DATA,NEW_TEMP,user_job):
     print(US_DATA)
     print(NEW_TEMP)
     if US_DATA == 'US data': #estimate temperature of US water chem data to correct estimated temperatures.
+        print('helo')
         user_data_temp=data_import_2.main_user_supply(user_data,grad,sur,area,co2_US_county,co2_US_state,co2_lon_lat) #should be able to substitute user_data for rawusgs
         if NEW_TEMP == 'Use estimated at-formation-depth temperature':
-            user_data_temp.to_csv(dolomite_r_result+'/user_data_temp.csv',sep=',',index=False)
-            merge_data=user_data_temp.merge(medusgs)
+            print('yo')
+        #    user_data_temp.to_csv(dolomite_r_result+'/user_data_temp.csv',sep=',',index=False)
+        #    merge_data=user_data_temp.merge(medusgs)
+        #    TO DO - data_processing6_user_defined in data_import_2
     else:
         merge_data=user_data.merge(medusgs)
 

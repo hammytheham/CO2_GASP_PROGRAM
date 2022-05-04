@@ -65,7 +65,11 @@ def MODIS_data_import():
 
 def medusgs_data_import(rawusgs,grad,sur):
     if Merge_usgs_grad_T_F == True:
-        medusgs=data_import_2.main(rawusgs,grad,sur)
+        area=None
+        co2_US_county=None
+        co2_US_state=None
+        co2_lon_lat=None
+        medusgs=data_import_2.main(rawusgs,grad,sur,area,co2_US_county,co2_US_state,co2_lon_lat)
     if Merge_usgs_grad_T_F == False:
         medusgs=pd.read_csv(s3_geochem_result+'/merged_data_all_samples')
         #print(len(medusgs))
